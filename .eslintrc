@@ -1,0 +1,31 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "browser": true,
+  },
+  "extends": [
+    "airbnb-base",
+    "eslint:recommended",
+  ],
+  "rules": {
+    "no-tabs": "off",
+    "indent": ["error", "tab", { "SwitchCase": 1 }],
+    "max-len": ["error", {
+      "code": 100,
+      "ignoreTrailingComments": true,
+      "ignoreUrls": true,
+      "ignoreStrings": true
+    }],
+    "no-param-reassign": ["error", { "props": false }],
+    "object-curly-newline": ["error", { "multiline": true }],
+    "arrow-parens": ["error", "as-needed"],
+    "object-shorthand": ["error", "always", { "avoidQuotes": false }],
+    "no-nested-ternary": "off",
+    "no-sparse-arrays": "off",
+    "import/extensions": ["error", "always", {
+      "js": "never",
+      "vue": "never"
+    }]
+  }
+}
