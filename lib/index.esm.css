@@ -1,0 +1,15 @@
+.mapboxgl-ctrl-terrain::before {
+  content: '3D';
+  color: inherit;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: block;
+}
+
+.mapboxgl-ctrl-terrain-3d::before {
+  content: '2D';
+  color: inherit;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: block;
+}

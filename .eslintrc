@@ -23,6 +23,7 @@
     "object-shorthand": ["error", "always", { "avoidQuotes": false }],
     "no-nested-ternary": "off",
     "no-sparse-arrays": "off",
+    "no-underscore-dangle": ["error", { "allowAfterThis": true }],
     "import/extensions": ["error", "always", {
       "js": "never",
       "vue": "never"

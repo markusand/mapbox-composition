@@ -1,6 +1,6 @@
 {
   "name": "mapbox-composition",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Mapbox GL wrapper to use with Composition API",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
@@ -12,11 +12,14 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
+    "autoprefixer": "^10.2.5",
     "eslint": "^7.22.0",
     "eslint-config-airbnb": "^18.2.1",
     "mapbox-gl": "^2.2.0",
+    "postcss": "^8.2.13",
     "rollup": "^2.41.5",
     "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.0",
     "vue": "^3.0.7"
   },
   "peerDependencies": {
