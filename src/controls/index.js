@@ -4,7 +4,7 @@ import TerrainControl from './TerrainControl';
 export default map => {
 	const CONTROLS = {};
 
-	const addControl = (name, control, position = 'top-right') => {
+	const addControl = (name, position, control) => {
 		CONTROLS[name] = control;
 		map.addControl(control, position);
 	};
@@ -16,28 +16,28 @@ export default map => {
 		}
 	};
 
-	const addNavigation = (config, position) => {
-		addControl('navigation', new NavigationControl(config), position);
+	const addNavigation = ({ position = 'top-right', ...config } = {}) => {
+		addControl('navigation', position, new NavigationControl(config));
 	};
 
-	const addScale = (config, position) => {
-		addControl('scale', new ScaleControl(config), position);
+	const addScale = ({ position = 'bottom-left', ...config } = {}) => {
+		addControl('scale', position, new ScaleControl(config));
 	};
 
-	const addGeolocate = (config, position) => {
-		addControl('geolocate', new GeolocateControl(config), position);
+	const addGeolocate = ({ position = 'top-right', ...config } = {}) => {
+		addControl('geolocate', position, new GeolocateControl(config));
 	};
 
-	const addAttribution = (config, position) => {
-		addControl('attribution', new AttributionControl(config), position);
+	const addAttribution = ({ position = 'bottom-right', ...config } = {}) => {
+		addControl('attribution', position, new AttributionControl(config));
 	};
 
-	const addFullscreen = (config, position) => {
-		addControl('fullscreen', new FullscreenControl(config), position);
+	const addFullscreen = ({ position = 'top-right', ...config } = {}) => {
+		addControl('fullscreen', position, new FullscreenControl(config));
 	};
 
-	const addTerrain = (config, position) => {
-		addControl('terrain', new TerrainControl(config), position);
+	const addTerrain = ({ position = 'top-right', ...config } = {}) => {
+		addControl('terrain', position, new TerrainControl(config));
 	};
 
 	const removeNavigation = () => removeControl('navigation');
