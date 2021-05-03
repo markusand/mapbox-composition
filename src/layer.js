@@ -15,12 +15,9 @@ export default function useLayer(map, options = {}) {
 	};
 
 	const setFilters = (filters = [], layers = Object.keys(LAYERS)) => {
+		const all = isObject(filters) ? ['all', ...Object.values(filters).filter(Boolean)] : filters;
 		layers.forEach(id => {
-			const filter = Array.isArray(filters)
-				? filters.length
-					? ['all', ...filters]
-					: LAYERS[id].filter
-				: null;
+			const filter = all && all.length ? all : LAYERS[id].filter;
 			map.setFilter(id, filter);
 		});
 	};
