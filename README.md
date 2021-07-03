@@ -1,4 +1,5 @@
 # Mapbox Composition
+
 Wrapper to use Mapbox GL with Composition API
 
 [![NPM](https://img.shields.io/npm/v/mapbox-composition)](https://npmjs.org/package/mapbox-composition)
@@ -6,11 +7,13 @@ Wrapper to use Mapbox GL with Composition API
 [![NPM](https://img.shields.io/npm/l/mapbox-composition)](https://npmjs.org/package/mapbox-composition)
 
 ## Install
+
 ```bash
 npm i mapbox-gl mapbox-composition
 ```
 
 ## Usage
+
 ```javascript
 import { onMounted } from 'vue';
 import { useMap, useControls, useGeoJSON, useMarker, usePopup } from 'mapbox-composition';
@@ -18,51 +21,55 @@ import { useMap, useControls, useGeoJSON, useMarker, usePopup } from 'mapbox-com
 const { MAPBOX_TOKEN } = process.env;
 
 export default {
-	name: 'Map',
-	setup() {
-		onMounted(async () => {
-			const map = await useMap('map', {
-				accessToken: MAPBOX_TOKEN,
-				style: 'mapbox://styles/mapbox/light-v9',
-				center: [-122.447303, 37.753574],
-				zoom: 12,
-			});
+    name: 'Map',
+    setup() {
+        onMounted(async () => {
+            const map = await useMap('map', {
+                accessToken: MAPBOX_TOKEN,
+                style: 'mapbox://styles/mapbox/light-v9',
+                center: [-122.447303, 37.753574],
+                zoom: 12,
+            });
 
-			const { addNavigation } = useControls(map);
-			addNavigation({ position: 'top-left' });
+            const { addNavigation } = useControls(map);
+            addNavigation({ position: 'top-left' });
 
-			useGeoJSON(map, {
-				name: 'facilities',
-				source: 'https://data.sfgov.org/resource/nc68-ngbr.geojson',
-				layers: [
-					{ name: 'markers', type: 'circle', paint: { 'circle-color': '#39f' } },
-					{ name: 'labels', type: 'symbol', layout: { 'text-field': 'common-name' } },
-				],
-			});
+            useGeoJSON(map, {
+                name: 'facilities',
+                source: 'https://data.sfgov.org/resource/nc68-ngbr.geojson',
+                layers: [
+                    { name: 'markers', type: 'circle', paint: { 'circle-color': '#39f' } },
+                    { name: 'labels', type: 'symbol', layout: { 'text-field': 'common-name' } },
+                ],
+            });
 
-			useMarker(map, {
-				coordinates: [-122.426498, 37.772496],
-				popup: usePopup({ content: 'Painted Ladies' }),
-			});
-		});
+            useMarker(map, {
+                coordinates: [-122.426498, 37.772496],
+                popup: usePopup({ content: 'Painted Ladies' }),
+            });
+        });
 
-		return {};
-	},
+        return {};
+  },
 };
 ```
 
 ### useMap(container, options)
+
 Load a map. This function must be called inside the onMounted hook, after the DOM container has been mounted.
 
 Load is asynchronous, and the function returns a promise that resolves to the Mapbox map instance. Use async/await pattern.
+
 ```javascript
 onMounted(async () => {
-	const map = await useMap('map', { /* Options */ });
+    const map = await useMap('map', { /* Options */ });
 });
 ```
+
 Options object accepts all Mapbox [Map parameters](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters).
 
 ### useTerrain(map, options)
+
 > Mapbox-gl v2+ is required to use 3D terrain
 
 Use an extruded 3D map and parametrize the [Sky API options](https://www.mapbox.com/blog/sky-api-atmospheric-scattering-algorithm-for-3d-maps).
@@ -75,6 +82,7 @@ extrude(1.5);
 ```
 
 ### useControls(map)
+
 Add map controls.
 
 ```javascript
@@ -100,29 +108,30 @@ A custom `addTerrain` control is available to seamlessly toggle 3D map extrusion
 ```javascript
 const { addTerrain } = useControls(map);
 addTerrain({
-	sky: { /* sky options */ },
-	exaggeration: 1.5,
-	extrudeOnInit: true,
+    sky: { /* sky options */ },
+    exaggeration: 1.5,
+    extrudeOnInit: true,
 });
 ```
 
 ### useLayer(map, options)
+
 Load one (or many) layers to map. Options require `source` and `layers` attributes, being source any valid style specification [Source](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) and being every layers object a valid style specification [Layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers). Note layer options do not need a `source` attribute as will directly take the source name.
 
 Options object may include event handlers for source events `onError`, `onLoadStart`, `onLoadEnd` and layer events `onClick` and `onHover`.
 
 ```javascript
 const layers = useLayer(map, {
-	name: 'gkhj45665',
-	source: {
-		type: 'vector',
-		url: 'http://api.example.com/tilejson.json',
-	},
-	layers: [
-		{ /* Layer options */ },
-		{ /* Other layer options */ },
-	],
-	onClick: ({ features }) => console.log(features),
+    name: 'gkhj45665',
+    source: {
+        type: 'vector',
+        url: 'http://api.example.com/tilejson.json',
+    },
+    layers: [
+        { /* Layer options */ },
+        { /* Other layer options */ },
+    ],
+    onClick: ({ features }) => console.log(features),
 });
 ```
 
@@ -138,6 +147,7 @@ updateSource('http://api.example.com/data/example.geojson');
 ```
 
 ### useMarker(map, options)
+
 Display a marker on the map. Options object accepts any valid [Marker parameters](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker-parameters) and may include `onDragStart`, `onDrag` and `onDragEnd` event handlers.
 
 The default Mapbox marker is applied unless a specific `element` is defined.
@@ -147,26 +157,27 @@ const pulseMarker = document.createElement('div');
 pulseMarker.classList.add('pulse-marker');
 
 const marker = useMarker(map, {
-	element: pulseMarker,
-	coordinates: [-122.447303, 37.753574],
-	onDragEnd: () => console.log('Marker dragged');
+    element: pulseMarker,
+    coordinates: [-122.447303, 37.753574],
+    onDragEnd: () => console.log('Marker dragged');
 });
 ```
 
 The function returns a `setLocation` modificator, a getter for the Mapbox marker instance and getter/setter for a popup.
 
 ### usePopup([map,] options)
+
 Display a popup on the map. Options object accepts any valid [Popup parameter](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup-parameters) and may include `onOpen` and `onClose` event handlers.
 
 Use `coordinates` to assign the location of the popup. Popup accepts HTML content with the `content` attribute.
 
 ```javascript
 const popup = usePopup(map, {
-	name: 'my-popup',
-	coordinates: [-122.447303, 37.753574],
-	content: '<h1>I am a popup</h1>',
-	closeOnClick: false,
-	onClose: () => console.log('Popup closed'),
+    name: 'my-popup',
+    coordinates: [-122.447303, 37.753574],
+    content: '<h1>I am a popup</h1>',
+    closeOnClick: false,
+    onClose: () => console.log('Popup closed'),
 });
 ```
 
@@ -176,16 +187,17 @@ If no `content` is provided, a container div is created with the `name` id (must
 
 ```html
 <teleport v-if="showPopup" to="#my-popup">
-	<!-- Complex HTML layout -->
+    <!-- Complex HTML layout -->
 </teleport>
 ```
 
 The `map` attribute is not required when binding popup to a marker, as well as the `coordinates` options parameter.
+
 ```javascript
 // Add popup on marker creation as a parameter
 const marker = useMarker(map, {
-	...OPTIONS,
-	popup: usePopup({ content: 'A popup for this marker' }),
+    ...OPTIONS,
+    popup: usePopup({ content: 'A popup for this marker' }),
 })
 
 // Or add popup dynamically

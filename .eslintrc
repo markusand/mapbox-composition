@@ -2,11 +2,11 @@
   "root": true,
   "env": {
     "es6": true,
-    "browser": true,
+    "browser": true
   },
   "extends": [
     "airbnb-base",
-    "eslint:recommended",
+    "eslint:recommended"
   ],
   "rules": {
     "no-tabs": "off",
