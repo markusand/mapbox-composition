@@ -5,5 +5,15 @@ import useGeoJSON from './geojson';
 import useMarker from './marker';
 import usePopup from './popup';
 import useTerrain from './terrain';
+import useAggregation from './utils/aggregation';
 
-export { useMap, useControls, useLayer, useGeoJSON, useMarker, usePopup, useTerrain };
+export {
+	useMap,
+	useControls,
+	useLayer,
+	useGeoJSON,
+	useMarker,
+	usePopup,
+	useTerrain,
+	useAggregation,
+};

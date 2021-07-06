@@ -25,5 +25,15 @@
   "peerDependencies": {
     "mapbox-gl": "^2.2.0",
     "vue": "^3.0.0"
+  },
+  "dependencies": {
+    "@turf/bbox": "^6.4.0",
+    "@turf/buffer": "^6.4.0",
+    "@turf/collect": "^6.4.0",
+    "@turf/concave": "^6.4.0",
+    "@turf/helpers": "^6.4.0",
+    "@turf/hex-grid": "^6.4.0",
+    "@turf/square-grid": "^6.4.0",
+    "stats-fns": "gist:acb7729589f6ef734449c483045efe0c"
   }
 }
