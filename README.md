@@ -73,12 +73,12 @@ Options object accepts all Mapbox [Map parameters](https://docs.mapbox.com/mapbo
 > Mapbox-gl v2+ is required to use 3D terrain
 
 Use an extruded 3D map and parametrize the [Sky API options](https://www.mapbox.com/blog/sky-api-atmospheric-scattering-algorithm-for-3d-maps).
-Returns `extrude(exaggeration)`, `flatten()`, and `isExtruded()` methods.
+Returns `extrude({ exaggeration, pitch })`, `flatten()`, and `isExtruded()` methods.
 
 ```javascript
 const sky = { /* sky options */ };
 const { extrude } = useTerrain(map, { sky });
-extrude(1.5);
+extrude({ exaggeration: 1.5, pitch: 40 });
 ```
 
 ### useControls(map)
@@ -110,6 +110,7 @@ const { addTerrain } = useControls(map);
 addTerrain({
     sky: { /* sky options */ },
     exaggeration: 1.5,
+    pitch: 40,
     extrudeOnInit: true,
 });
 ```

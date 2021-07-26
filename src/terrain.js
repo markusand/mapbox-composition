@@ -14,8 +14,9 @@ export default function useTerrain(map, options = {}) {
 		...rest,
 	});
 
-	const extrude = (exaggeration = 1.5) => {
+	const extrude = ({ exaggeration = 1.5, pitch = 45 }) => {
 		map.setTerrain({ source: 'mapboxgl-dem', exaggeration });
+		map.easeTo({ pitch });
 		if (sky && !map.getLayer('mapboxgl-sky')) {
 			map.addLayer({ id: 'mapboxgl-sky', type: 'sky', paint: sky });
 		}
@@ -23,6 +24,7 @@ export default function useTerrain(map, options = {}) {
 
 	const flatten = () => {
 		map.setTerrain();
+		map.easeTo({ pitch: 0 });
 		if (map.getLayer('mapboxgl-sky')) map.removeLayer('mapboxgl-sky');
 	};
 

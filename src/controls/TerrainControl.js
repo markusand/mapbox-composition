@@ -7,7 +7,7 @@ export default class TerrainControl {
 	}
 
 	onAdd(map) {
-		const { extrudeOnInit = false, exaggeration, ...options } = this._options;
+		const { extrudeOnInit = false, exaggeration, pitch, ...options } = this._options;
 		const terrain = useTerrain(map, options);
 
 		this._container = document.createElement('div');
@@ -18,7 +18,7 @@ export default class TerrainControl {
 		this._container.appendChild(button);
 
 		const extrude = doExtrude => {
-			if (doExtrude) terrain.extrude(exaggeration);
+			if (doExtrude) terrain.extrude({ exaggeration, pitch });
 			else terrain.flatten();
 			button.classList.toggle('mapboxgl-ctrl-terrain-3d', doExtrude);
 		};
