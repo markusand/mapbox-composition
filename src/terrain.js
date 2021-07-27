@@ -1,3 +1,9 @@
+const TERRAIN = {
+	type: 'raster-dem',
+	url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+	tileSize: 512,
+};
+
 const SKY = {
 	'sky-opacity': ['interpolate', ['linear'], ['zoom'], 0, 0, 8, 1],
 	'sky-type': 'atmosphere',
@@ -7,14 +13,8 @@ const SKY = {
 export default function useTerrain(map, options = {}) {
 	const { sky = SKY, ...rest } = options;
 
-	map.addSource('mapboxgl-dem', {
-		type: 'raster-dem',
-		url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
-		tileSize: 512,
-		...rest,
-	});
-
 	const extrude = ({ exaggeration = 1.5, pitch = 45 }) => {
+		map.addSource('mapboxgl-dem', { ...TERRAIN, ...rest });
 		map.setTerrain({ source: 'mapboxgl-dem', exaggeration });
 		map.easeTo({ pitch });
 		if (sky && !map.getLayer('mapboxgl-sky')) {
@@ -25,6 +25,7 @@ export default function useTerrain(map, options = {}) {
 	const flatten = () => {
 		map.setTerrain();
 		map.easeTo({ pitch: 0 });
+		if (map.getSource('mapboxgl-dem')) map.removeSource('mapboxgl-dem');
 		if (map.getLayer('mapboxgl-sky')) map.removeLayer('mapboxgl-sky');
 	};
 
