@@ -103,6 +103,28 @@ addNavigation();
 addScale({ position: 'bottom-right', maxWidth: 150 });
 ```
 
+A custom `addStyles` control is available to switch between map styles. Switch buttons accept a text label or an image. Styles can be customized via [variables](./src/controls/styles.control.css).
+
+```javascript
+const { addStyles } = useControls(map);
+addStyles({
+    styles: [
+        {
+          name: 'Mapbox Light',
+          url: 'mapbox://styles/mapbox/light-v10',
+          label: 'Light',
+          // img: '/images/map/thumb.contours.jpg',
+        },
+        {
+          name: 'Mapbox Satellite',
+          url: 'mapbox://styles/mapbox/satellite-v9',
+          label: 'Satellite',
+          // img: '/images/map/thumb.satellite.jpg',
+        },
+    ]
+})
+```
+
 A custom `addTerrain` control is available to seamlessly toggle 3D map extrusion.
 
 ```javascript
@@ -118,6 +140,8 @@ addTerrain({
 ### useLayer(map, options)
 
 Load one (or many) layers to map. Options require `source` and `layers` attributes, being source any valid style specification [Source](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) and being every layers object a valid style specification [Layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers). Note layer options do not need a `source` attribute as will directly take the source name.
+
+Sources and layers are restored by default after map style changes. To disable this behaviour, set `persist` attribute to false on layer config object.
 
 Options object may include event handlers for source events `onError`, `onLoadStart`, `onLoadEnd` and layer events `onClick` and `onHover`.
 
