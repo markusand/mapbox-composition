@@ -1,4 +1,5 @@
 import { NavigationControl, ScaleControl, GeolocateControl, AttributionControl, FullscreenControl } from 'mapbox-gl';
+import StylesControl from './StylesControl';
 import TerrainControl from './TerrainControl';
 
 export default map => {
@@ -36,6 +37,10 @@ export default map => {
 		addControl('fullscreen', position, new FullscreenControl(config));
 	};
 
+	const addStyles = ({ position = 'top-right', ...config } = {}) => {
+		addControl('styles', position, new StylesControl(config));
+	};
+
 	const addTerrain = ({ position = 'top-right', ...config } = {}) => {
 		addControl('terrain', position, new TerrainControl(config));
 	};
@@ -45,6 +50,7 @@ export default map => {
 	const removeGeolocate = () => removeControl('geolocate');
 	const removeAttribution = () => removeControl('attribution');
 	const removeFullscreen = () => removeControl('fullscreen');
+	const removeStyles = () => removeControl('styles');
 	const removeTerrain = () => removeControl('terrain');
 
 	return {
@@ -55,12 +61,14 @@ export default map => {
 		addGeolocate,
 		addAttribution,
 		addFullscreen,
+		addStyles,
 		addTerrain,
 		removeNavigation,
 		removeScale,
 		removeGeolocate,
 		removeAttribution,
 		removeFullscreen,
+		removeStyles,
 		removeTerrain,
 	};
 };

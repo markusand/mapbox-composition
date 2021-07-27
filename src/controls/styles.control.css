@@ -1,0 +1,42 @@
+.mapboxgl-ctrl-styles {
+	display: flex;
+	overflow: hidden;
+  }
+
+  .mapboxgl-ctrl-styles button {
+	width: auto !important;
+	height: auto !important;
+	align-items: center;
+	padding: 0 !important;
+	border-top: 0 !important;
+	margin: 0 !important;
+	display: none !important;
+	background: var(--map-ctrl-styles-background, #fff) !important;
+  }
+
+  .mapboxgl-ctrl-styles:hover button,
+  .mapboxgl-ctrl-styles button.is-active {
+	display: flex !important;
+  }
+
+  .mapboxgl-ctrl-styles:hover button + button {
+	border-left: 1px solid var(--map-ctrl-styles-border, #ddd);
+  }
+
+  .mapboxgl-ctrl-styles button span {
+	display: block;
+	margin: var(--map-ctrl-styles-label-margin, 0.5em 0.8rem);
+  }
+
+  .mapboxgl-ctrl-styles button img {
+	display: block;
+	height: var(--map-ctrl-styles-thumb-size, 29px);
+	width: var(--map-ctrl-styles-thumb-size, 29px);
+	margin: var(--map-ctrl-styles-thumb-margin, 0);
+	opacity: var(--map-ctrl-styles-thumb-opacity, 0.75);
+  }
+
+  .mapboxgl-ctrl-styles button:hover img,
+  .mapboxgl-ctrl-styles button.is-active img {
+	opacity: 1;
+  }
