@@ -11,14 +11,17 @@ export default function useLayer(map, options = {}) {
 
 	const setVisibility = (visible, layers = Object.keys(LAYERS)) => {
 		const visibility = visible ? 'visible' : 'none';
-		layers.forEach(id => map.setLayoutProperty(id, 'visibility', visibility));
+		layers.forEach(id => {
+			LAYERS[id].visible = visible;
+			map.setLayoutProperty(id, 'visibility', visibility);
+		});
 	};
 
 	const setFilters = (filters = [], layers = Object.keys(LAYERS)) => {
 		const all = isObject(filters) ? ['all', ...Object.values(filters).filter(Boolean)] : filters;
 		layers.forEach(id => {
-			const filter = all && all.length ? all : LAYERS[id].filter;
-			map.setFilter(id, filter);
+			LAYERS[id].filter = all && all.length ? all : LAYERS[id].filter;
+			map.setFilter(id, LAYERS[id].filter);
 		});
 	};
 
@@ -31,25 +34,31 @@ export default function useLayer(map, options = {}) {
 	};
 
 	const addLayers = (layers = []) => {
-		layers.forEach(({ name, ...params }, i) => {
-			const id = name || `${options.name}--${i}`;
-			LAYERS[id] = params;
-			map.addLayer({ id, source: options.name, ...params });
+		const { name: sourceName, persist = true } = options;
+		layers.forEach(({ name, visible = true, ...params }, i) => {
+			const id = name || `${sourceName}--${i}`;
+			LAYERS[id] = { name, ...params };
+			map.addLayer({ id, source: sourceName, ...params });
+			setVisibility(visible, [id]);
 			bindLayerEvents(id);
 		});
+		if (persist) map.once('style.load', () => addLayers(Object.values(LAYERS)));
 	};
 
 	const clearSource = () => {
+		const { name } = options;
 		clearLayers();
 		unbindSourceEvents();
-		if (map.getSource(options.name)) map.removeSource(options.name);
+		if (map.getSource(name)) map.removeSource(name);
 	};
 
 	const setSource = source => {
-		const key = options.type === 'geojson' ? 'data' : 'url';
+		const { name, type, persist = true } = options;
+		const key = type === 'geojson' ? 'data' : 'url';
 		const content = isObject(source) ? source : { [key]: source };
-		map.addSource(options.name, { type: options.type, ...content });
+		map.addSource(name, { type, ...content });
 		bindSourceEvents();
+		if (persist) map.once('style.load', () => setSource(source));
 	};
 
 	const updateSource = (source, layers = options.layers) => {
