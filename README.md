@@ -137,6 +137,17 @@ addTerrain({
 });
 ```
 
+### useAsync(map)
+
+Use promisified versions of mapbox actions such as `easeTo`, `flyTo`, `fitBounds`, `zoomIn`, etc. and detect its end.
+
+```javascript
+const { flyTo } = useAsync(map);
+console.log('Going to Berkeley');
+await flyTo({ center: [-122.272998, 37.871559] });
+console.log('Arrived at Berkeley');
+```
+
 ### useLayer(map, options)
 
 Load one (or many) layers to map. Options require `source` and `layers` attributes, being source any valid style specification [Source](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) and being every layers object a valid style specification [Layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers). Note layer options do not need a `source` attribute as will directly take the source name.
