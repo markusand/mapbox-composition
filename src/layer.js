@@ -5,7 +5,7 @@ const isObject = item => !!item && item.constructor === Object;
 export default function useLayer(map, options = {}) {
 	const { bindSourceEvents, unbindSourceEvents } = useSourceEvents(map, options.name, options);
 	const { bindLayerEvents, unbindLayerEvents } = useLayerEvents(map, options);
-	const LAYERS = [];
+	const LAYERS = {};
 
 	const isVisible = id => map.getLayoutProperty(id, 'visibility') === 'visible';
 
@@ -25,12 +25,16 @@ export default function useLayer(map, options = {}) {
 		});
 	};
 
+	/* eslint-disable-next-line no-use-before-define */ /* Trust in function hoisting */
+	const persistLayerHandler = () => addLayers(Object.values(LAYERS));
+
 	const clearLayers = (layers = Object.keys(LAYERS)) => {
 		layers.forEach(id => {
 			unbindLayerEvents(id);
 			if (map.getLayer(id)) map.removeLayer(id);
 			if (id in LAYERS) delete LAYERS[id];
 		});
+		map.off('style.load', persistLayerHandler);
 	};
 
 	const addLayers = (layers = []) => {
@@ -42,14 +46,18 @@ export default function useLayer(map, options = {}) {
 			setVisibility(visible, [id]);
 			bindLayerEvents(id);
 		});
-		if (persist) map.once('style.load', () => addLayers(Object.values(LAYERS)));
+		if (persist) map.once('style.load', persistLayerHandler);
 	};
+
+	// Source handler is overriden every time to maintain the last available source
+	let persistSourceHandler;
 
 	const clearSource = () => {
 		const { name } = options;
 		clearLayers();
 		unbindSourceEvents();
 		if (map.getSource(name)) map.removeSource(name);
+		map.off('style.load', persistSourceHandler);
 	};
 
 	const setSource = source => {
@@ -58,7 +66,10 @@ export default function useLayer(map, options = {}) {
 		const content = isObject(source) ? source : { [key]: source };
 		map.addSource(name, { type, ...content });
 		bindSourceEvents();
-		if (persist) map.once('style.load', () => setSource(source));
+		if (persist) {
+			persistSourceHandler = () => setSource(source);
+			map.once('style.load', persistSourceHandler);
+		}
 	};
 
 	const updateSource = (source, layers = options.layers) => {
