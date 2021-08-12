@@ -49,6 +49,8 @@ export default function useLayer(map, options = {}) {
 		if (persist) map.once('style.load', persistLayerHandler);
 	};
 
+	const hasLayer = id => !!LAYERS[id] && !!map.getLayer(id);
+
 	// Source handler is overriden every time to maintain the last available source
 	let persistSourceHandler;
 
@@ -84,6 +86,7 @@ export default function useLayer(map, options = {}) {
 	return {
 		clearLayers,
 		addLayers,
+		hasLayer,
 		clearSource,
 		setSource,
 		updateSource,

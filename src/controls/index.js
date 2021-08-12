@@ -17,6 +17,8 @@ export default map => {
 		}
 	};
 
+	const hasControl = name => !!CONTROLS[name] && map.hasControl(CONTROLS[name]);
+
 	const addNavigation = ({ position = 'top-right', ...config } = {}) => {
 		addControl('navigation', position, new NavigationControl(config));
 	};
@@ -56,6 +58,7 @@ export default map => {
 	return {
 		addControl,
 		removeControl,
+		hasControl,
 		addNavigation,
 		addScale,
 		addGeolocate,
