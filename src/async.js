@@ -2,9 +2,14 @@ const ACTIONS = ['panBy', 'panTo', 'zoomTo', 'zoomIn', 'zoomOut', 'rotateTo', 'r
 
 export default function useAsync(map) {
 	return ACTIONS.reduce((acc, action) => {
+		const eventName = action.toLowerCase();
 		acc[action] = options => new Promise(resolve => {
 			map[action](options);
-			map.once('idle', resolve);
+			map.fire(`${eventName}start`);
+			map.once('moveend', event => {
+				map.fire(`${eventName}end`);
+				resolve(event);
+			});
 		});
 		return acc;
 	}, {});
