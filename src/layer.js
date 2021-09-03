@@ -2,7 +2,7 @@ import { useSourceEvents, useLayerEvents } from './events';
 
 const isObject = item => !!item && item.constructor === Object;
 
-export default function useLayer(map, options = {}) {
+export default (map, options = {}) => {
 	const { bindSourceEvents, unbindSourceEvents } = useSourceEvents(map, options.name, options);
 	const { bindLayerEvents, unbindLayerEvents } = useLayerEvents(map, options);
 	const LAYERS = {};
@@ -94,4 +94,4 @@ export default function useLayer(map, options = {}) {
 		setVisibility,
 		setFilters,
 	};
-}
+};

@@ -1,6 +1,6 @@
 import useLayer from './layer';
 
-export default function useGeoJSON(map, options = {}) {
+export default (map, options = {}) => {
 	// Adapt to GeoJSON source format
 	const geoJSON = useLayer(map, {
 		...options,
@@ -16,4 +16,4 @@ export default function useGeoJSON(map, options = {}) {
 	};
 
 	return { ...geoJSON, updateSource };
-}
+};

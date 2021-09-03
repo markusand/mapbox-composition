@@ -1,7 +1,7 @@
 import { Marker } from 'mapbox-gl';
 import { useMarkerEvents } from './events';
 
-export default function useMarker(map, options = {}) {
+export default (map, options = {}) => {
 	const { coordinates, popup, ...rest } = options;
 	const { bindMarkerEvents } = useMarkerEvents(options);
 
@@ -25,4 +25,4 @@ export default function useMarker(map, options = {}) {
 		get popup() { return markerPopup; },
 		set popup(newPopup) { setPopup(newPopup); },
 	};
-}
+};

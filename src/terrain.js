@@ -10,7 +10,7 @@ const SKY = {
 	'sky-atmosphere-sun-intensity': 5,
 };
 
-export default function useTerrain(map, options = {}) {
+export default (map, options = {}) => {
 	const { sky = SKY, ...rest } = options;
 
 	const extrude = ({ exaggeration = 1.5, pitch = 45 }) => {
@@ -32,4 +32,4 @@ export default function useTerrain(map, options = {}) {
 	const isExtruded = () => !!map.getTerrain();
 
 	return { extrude, flatten, isExtruded };
-}
+};

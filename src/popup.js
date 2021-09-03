@@ -3,7 +3,7 @@ import { usePopupEvents } from './events';
 
 const uuid = () => Math.random().toString(36).substring(7);
 
-export default function usePopup(...args) {
+export default (...args) => {
 	const [map, options = {}] = args.length === 1 ? [, args[0]] : args;
 	const { content, coordinates, name = `popup-${uuid()}`, ...rest } = options;
 	const { bindPopupEvents } = usePopupEvents(options);
@@ -24,4 +24,4 @@ export default function usePopup(...args) {
 		setLocation,
 		setContent,
 	};
-}
+};

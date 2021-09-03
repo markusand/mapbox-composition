@@ -2,7 +2,7 @@ import { Map } from 'mapbox-gl';
 import { useMapEvents } from './events';
 import { debounce } from './utils';
 
-export default async function useMap(container, options = {}) {
+export default async (container, options = {}) => {
 	const map = new Map({ container, ...options });
 	useMapEvents(map, options);
 	await map.once('load');
@@ -11,4 +11,4 @@ export default async function useMap(container, options = {}) {
 	resize.observe(document.getElementById(container));
 
 	return map;
-}
+};
