@@ -1,6 +1,6 @@
 {
   "name": "mapbox-composition",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Mapbox GL wrapper to use with Composition API",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
@@ -24,6 +24,6 @@
     "vue": "^3.0.7"
   },
   "peerDependencies": {
-    "mapbox-gl": "^2.2.0"
+    "mapbox-gl": "^2.3.0"
   }
 }
