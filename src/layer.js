@@ -39,9 +39,10 @@ export default (map, options = {}) => {
 
 	const updateLayers = (layers = []) => {
 		layers.forEach(layer => {
-			const { name, visibility, filter, paint = {}, layout = {} } = layer;
+			const { name, visibility, filter, under, paint = {}, layout = {} } = layer;
 			if (visibility !== undefined) setVisibility(visibility, [name]);
 			if (filter !== undefined) setFilters(filter, [name]);
+			if (under && map.getLayer(under)) map.moveLayer(name, under);
 			Object.entries(paint).forEach(([prop, val]) => map.setPaintProperty(name, prop, val));
 			Object.entries(layout).forEach(([prop, val]) => map.setLayoutProperty(name, prop, val));
 			LAYERS[name] = { ...LAYERS[name], ...layer };
@@ -50,10 +51,11 @@ export default (map, options = {}) => {
 
 	const addLayers = (layers = []) => {
 		const { name: sourceName, persist = true } = options;
-		layers.forEach(({ name, visible = true, ...params }, i) => {
+		layers.forEach(({ name, under, visible = true, ...params }, i) => {
 			const id = name || `${sourceName}--${i}`;
-			LAYERS[id] = { name, visible, ...params };
-			map.addLayer({ id, source: sourceName, ...params });
+			LAYERS[id] = { name, under, visible, ...params };
+			const zPosition = map.getLayer(under) ? under : undefined;
+			map.addLayer({ id, source: sourceName, ...params }, zPosition);
 			setVisibility(visible, [id]);
 			bindLayerEvents(id);
 		});
