@@ -50,7 +50,7 @@ export default (map, options = {}) => {
 		const { name: sourceName, persist = true } = options;
 		layers.forEach(({ name, visible = true, ...params }, i) => {
 			const id = name || `${sourceName}--${i}`;
-			LAYERS[id] = { name, ...params };
+			LAYERS[id] = { name, visible, ...params };
 			map.addLayer({ id, source: sourceName, ...params });
 			setVisibility(visible, [id]);
 			bindLayerEvents(id);
