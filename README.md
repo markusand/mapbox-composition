@@ -167,7 +167,7 @@ Load one (or many) layers to map. Options require `source` and `layers` attribut
 
 Sources and layers are restored by default after map style changes. To disable this behaviour, set `persist` attribute to false on layer config object.
 
-Layers can be placed under another specific layer by setting the attribute `under` with the name of that layer.
+Layers can be placed under another specific layer by setting the attribute `under` with the name of that layer. This attribute can be global or per layer basis.
 
 Options object may include event handlers for source events `onError`, `onLoadStart`, `onLoadEnd` and layer events `onClick` and `onHover`.
 

@@ -50,8 +50,8 @@ export default (map, options = {}) => {
 	};
 
 	const addLayers = (layers = []) => {
-		const { name: sourceName, persist = true } = options;
-		layers.forEach(({ name, under, visible = true, ...params }, i) => {
+		const { name: sourceName, persist = true, under: globalUnder } = options;
+		layers.forEach(({ name, under = globalUnder, visible = true, ...params }, i) => {
 			const id = name || `${sourceName}--${i}`;
 			LAYERS[id] = { name, under, visible, ...params };
 			const zPosition = map.getLayer(under) ? under : undefined;
