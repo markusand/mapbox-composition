@@ -37,6 +37,15 @@ export default (map, options = {}) => {
 		map.off('style.load', persistLayerHandler);
 	};
 
+	const updateLayers = (layers = []) => {
+		layers.forEach(({ name, visibility, filter, paint = {}, layout = {} }) => {
+			if (visibility !== undefined) setVisibility(visibility, [name]);
+			if (filter !== undefined) setFilters(filter, [name]);
+			Object.entries(paint).forEach(([prop, val]) => map.setPaintProperty(name, prop, val));
+			Object.entries(layout).forEach(([prop, val]) => map.setLayoutProperty(name, prop, val));
+		});
+	};
+
 	const addLayers = (layers = []) => {
 		const { name: sourceName, persist = true } = options;
 		layers.forEach(({ name, visible = true, ...params }, i) => {
@@ -85,6 +94,7 @@ export default (map, options = {}) => {
 
 	return {
 		clearLayers,
+		updateLayers,
 		addLayers,
 		hasLayer,
 		clearSource,

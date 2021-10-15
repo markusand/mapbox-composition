@@ -173,7 +173,7 @@ const layers = useLayer(map, {
 
 Use `useGeoJSON(map, options)` as a shortcut for GeoJSON sources that brings enhancements in their management. The `source` attribute can be a GeoJSON url or a GeoJSON object.
 
-The function returns manipulators for layers and source `isVisible(layer_id)`, `setVisibility(isVisible, [,layer_names])`, `setFilters(filters, [,layer_names])`, `clearLayers([layer_names])`, `addLayers(layers)`, `clearSource`, `setSource(source)` and `updateSource(source, [,layers])`. If the layer_names array is not provided, the action will be performed to all layers.
+The function returns manipulators for layers and source `isVisible(layer_id)`, `setVisibility(isVisible, [,layer_names])`, `setFilters(filters, [,layer_names])`, `clearLayers([layer_names])`, `updateLayers(layers)`, `addLayers(layers)`, `clearSource`, `setSource(source)` and `updateSource(source, [,layers])`. If the layer_names array is not provided, the action will be performed to all layers.
 
 ```javascript
 const { setVisibility, setFilters, updateSource } = useGeoJSON(map, { /* options */ });
