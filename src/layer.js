@@ -38,11 +38,13 @@ export default (map, options = {}) => {
 	};
 
 	const updateLayers = (layers = []) => {
-		layers.forEach(({ name, visibility, filter, paint = {}, layout = {} }) => {
+		layers.forEach(layer => {
+			const { name, visibility, filter, paint = {}, layout = {} } = layer;
 			if (visibility !== undefined) setVisibility(visibility, [name]);
 			if (filter !== undefined) setFilters(filter, [name]);
 			Object.entries(paint).forEach(([prop, val]) => map.setPaintProperty(name, prop, val));
 			Object.entries(layout).forEach(([prop, val]) => map.setLayoutProperty(name, prop, val));
+			LAYERS[name] = { ...LAYERS[name], ...layer };
 		});
 	};
 
