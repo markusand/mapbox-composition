@@ -68,6 +68,19 @@ onMounted(async () => {
 
 Options object accepts all Mapbox [Map parameters](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters).
 
+Handlers for any [map event](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-events) can be added using the event name prefixed with `on`, such as follows
+
+```javascript
+useMap('map', {
+    // Many options...
+    onZoomEnd: () => console.log('Zoomed'),
+    onFlyToEnd: () => console.log('Fly finished!'),
+    onDragEnd: () => console.log('Dragged'),
+})
+```
+
+Note that handlers for async events can also be defined, as long as `useAsync` is used.
+
 ### useTerrain(map, options)
 
 > Mapbox-gl v2+ is required to use 3D terrain
