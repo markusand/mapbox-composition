@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+	"prepare": "npm run build"
   },
   "author": "Marc Vilella <mvilella@obsa.ad> (https://github.com/markusand)",
   "license": "ISC",
@@ -25,5 +26,8 @@
   },
   "peerDependencies": {
     "mapbox-gl": "^2.3.0"
-  }
+  },
+  "files": [
+    "lib"
+  ]
 }
