@@ -6,5 +6,16 @@ import useMarker from './marker';
 import usePopup from './popup';
 import useTerrain from './terrain';
 import useAsync from './async';
+import useImages from './images';
 
-export { useMap, useControls, useLayer, useGeoJSON, useMarker, usePopup, useTerrain, useAsync };
+export {
+	useMap,
+	useControls,
+	useLayer,
+	useGeoJSON,
+	useMarker,
+	usePopup,
+	useTerrain,
+	useAsync,
+	useImages,
+};

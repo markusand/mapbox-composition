@@ -255,3 +255,23 @@ const marker = useMarker(map, {
 const marker = useMarker(map, OPTIONS);
 marker.popup = usePopup({ content: 'A popup for this marker' });
 ```
+
+### useImages(map)
+
+Load images to be used as icons on the map.
+
+Returns `addImages(images, options)` and `removeImages(images)`. Images are added asynchronously and are not displayed on the map until they are loaded.
+
+Options object accepts `persist` attribute (defaults to true) to reload images after map style changes.
+
+```javascript
+const images = {
+    'my-icon': 'https://example.com/my-icon.png',
+    'my-other': 'https://example.com/my-other.png',
+};
+const { addImages, removeImages } = useImages(map);
+await addImages(images);
+
+removeImages(images);
+// or removeImages(['my-icon', 'my-other']);
+```
