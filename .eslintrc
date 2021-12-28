@@ -21,6 +21,7 @@
     "object-curly-newline": ["error", { "multiline": true }],
     "arrow-parens": ["error", "as-needed"],
     "object-shorthand": ["error", "always", { "avoidQuotes": false }],
+	"no-promise-executor-return": "off",
     "no-nested-ternary": "off",
     "no-sparse-arrays": "off",
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],

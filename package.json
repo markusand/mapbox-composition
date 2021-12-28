@@ -6,17 +6,17 @@
   "module": "lib/index.esm.js",
   "scripts": {
     "build": "rollup -c",
-	"prepare": "npm run build"
+    "prepare": "npm run build"
   },
   "author": "Marc Vilella <mvilella@obsa.ad> (https://github.com/markusand)",
   "license": "ISC",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^17.1.0",
-    "@rollup/plugin-node-resolve": "^11.2.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.1.1",
     "autoprefixer": "^10.2.5",
-    "eslint": "^7.22.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "mapbox-gl": "^2.2.0",
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "mapbox-gl": "^2.3.0",
     "postcss": "^8.2.13",
     "rollup": "^2.41.5",
     "rollup-plugin-peer-deps-external": "^2.2.4",
