@@ -1,6 +1,5 @@
 import { useSourceEvents, useLayerEvents } from './events';
-
-const isObject = item => !!item && item.constructor === Object;
+import { isObject } from './utils';
 
 export default (map, options = {}) => {
 	const { bindSourceEvents, unbindSourceEvents } = useSourceEvents(map, options.name, options);

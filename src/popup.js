@@ -1,7 +1,6 @@
 import { Popup } from 'mapbox-gl';
 import { usePopupEvents } from './events';
-
-const uuid = () => Math.random().toString(36).substring(7);
+import { uuid } from './utils';
 
 export default (...args) => {
 	const [map, options = {}] = args.length === 1 ? [, args[0]] : args;
