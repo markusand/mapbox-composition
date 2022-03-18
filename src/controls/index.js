@@ -8,6 +8,7 @@ export default map => {
 	const addControl = (name, position, control) => {
 		CONTROLS[name] = control;
 		map.addControl(control, position);
+		return control;
 	};
 
 	const removeControl = name => {
@@ -19,33 +20,33 @@ export default map => {
 
 	const hasControl = name => !!CONTROLS[name] && map.hasControl(CONTROLS[name]);
 
-	const addNavigation = ({ position = 'top-right', ...config } = {}) => {
-		addControl('navigation', position, new NavigationControl(config));
-	};
+	const addNavigation = ({ position = 'top-right', ...config } = {}) => (
+		addControl('navigation', position, new NavigationControl(config))
+	);
 
-	const addScale = ({ position = 'bottom-left', ...config } = {}) => {
-		addControl('scale', position, new ScaleControl(config));
-	};
+	const addScale = ({ position = 'bottom-left', ...config } = {}) => (
+		addControl('scale', position, new ScaleControl(config))
+	);
 
-	const addGeolocate = ({ position = 'top-right', ...config } = {}) => {
-		addControl('geolocate', position, new GeolocateControl(config));
-	};
+	const addGeolocate = ({ position = 'top-right', ...config } = {}) => (
+		addControl('geolocate', position, new GeolocateControl(config))
+	);
 
-	const addAttribution = ({ position = 'bottom-right', ...config } = {}) => {
-		addControl('attribution', position, new AttributionControl(config));
-	};
+	const addAttribution = ({ position = 'bottom-right', ...config } = {}) => (
+		addControl('attribution', position, new AttributionControl(config))
+	);
 
-	const addFullscreen = ({ position = 'top-right', ...config } = {}) => {
-		addControl('fullscreen', position, new FullscreenControl(config));
-	};
+	const addFullscreen = ({ position = 'top-right', ...config } = {}) => (
+		addControl('fullscreen', position, new FullscreenControl(config))
+	);
 
-	const addStyles = ({ position = 'top-right', ...config } = {}) => {
-		addControl('styles', position, new StylesControl(config));
-	};
+	const addStyles = ({ position = 'top-right', ...config } = {}) => (
+		addControl('styles', position, new StylesControl(config))
+	);
 
-	const addTerrain = ({ position = 'top-right', ...config } = {}) => {
-		addControl('terrain', position, new TerrainControl(config));
-	};
+	const addTerrain = ({ position = 'top-right', ...config } = {}) => (
+		addControl('terrain', position, new TerrainControl(config))
+	);
 
 	const removeNavigation = () => removeControl('navigation');
 	const removeScale = () => removeControl('scale');
