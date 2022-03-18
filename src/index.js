@@ -7,6 +7,7 @@ import usePopup from './popup';
 import useTerrain from './terrain';
 import useAsync from './async';
 import useImages from './images';
+import helpers from './helpers';
 
 export {
 	useMap,
@@ -18,4 +19,5 @@ export {
 	useTerrain,
 	useAsync,
 	useImages,
+	helpers,
 };
