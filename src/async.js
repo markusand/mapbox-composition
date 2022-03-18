@@ -1,6 +1,6 @@
-const ACTIONS = ['panBy', 'panTo', 'zoomTo', 'zoomIn', 'zoomOut', 'rotateTo', 'resetNorth', 'snapToNorth', 'fitBounds', 'fitScreenCoordinates', 'jumpTo', 'easeTo', 'flyTo'];
+export const ACTIONS = ['panBy', 'panTo', 'zoomTo', 'zoomIn', 'zoomOut', 'rotateTo', 'resetNorth', 'snapToNorth', 'fitBounds', 'fitScreenCoordinates', 'jumpTo', 'easeTo', 'flyTo'];
 
-export default map => ACTIONS.reduce((acc, action) => {
+export default (map, actions = ACTIONS) => actions.reduce((acc, action) => {
 	const eventName = action.toLowerCase();
 	acc[action] = (...options) => new Promise(resolve => {
 		map[action](...options);
