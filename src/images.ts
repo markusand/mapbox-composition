@@ -1,17 +1,24 @@
-export default map => {
-	let persistImages = {};
-	let persistListener;
+import type { Map } from 'mapbox-gl';
 
-	const loadImage = ([name, path]) => new Promise((resolve, reject) => {
-		if (map.hasImage(name)) return resolve();
-		return map.loadImage(path, (error, image) => {
-			if (error) return reject(error);
-			map.addImage(name, image);
-			return resolve();
+export default (map: Map) => {
+	let persistImages: Record<string, string> = {};
+	let persistListener: ((ev: any) => void);
+
+	const loadImage = ([name, path]: string[]): Promise<void> => {
+		return new Promise((resolve, reject) => {
+			if (map.hasImage(name)) return resolve();
+			return map.loadImage(path, (error, image) => {
+				if (error) return reject(error);
+				if (image) map.addImage(name, image);
+				return resolve();
+			});
 		});
-	});
+	};
 
-	const addImages = async (images, options = {}) => {
+	const addImages = async (
+		images: Record<string, string>,
+		options: { persist?: boolean }
+	): Promise<void> => {
 		const { persist = true } = options;
 		if (persist) {
 			persistImages = { ...persistImages, ...images };
@@ -21,19 +28,16 @@ export default map => {
 			}
 		}
 		const loaded = Object.entries(images).map(loadImage);
-		return Promise.all(loaded);
+		await Promise.all(loaded);
 	};
 
-	const removeImages = images => {
+	const removeImages = (images: string | string[]): void => {
 		const names = Array.isArray(images) ? images : Object.keys(images);
 		names.forEach(name => {
 			map.removeImage(name);
 			delete persistImages[name];
 		});
-		if (!Object.keys(persistImages).length) {
-			map.off('style.load', persistListener);
-			persistListener = null;
-		}
+		if (!Object.keys(persistImages).length) map.off('style.load', persistListener);
 	};
 
 	return { addImages, removeImages };
