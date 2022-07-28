@@ -1,6 +1,10 @@
 import type {
 	MapboxOptions,
 	MapEventType,
+	LngLatLike,
+	EventedListener,
+	Popup as MPopup,
+	PopupOptions as MPopupOptions,
 	SkyPaint,
 	TerrainSpecification,
 	Fog,
@@ -17,6 +21,21 @@ export type MapEventHandlers = Record<
 export type MapOptions = Omit<MapboxOptions, 'container'>
 	& Partial<MapEventHandlers>
 	& { debounceTime?: number };
+
+export type Popup = {
+	popup: MPopup,
+	name: string;
+	setLocation: (location: LngLatLike) => void;
+	setContent: (content: string) => void;
+};
+
+export type PopupOptions = {
+	name: string;
+	coordinates?: LngLatLike;
+	content?: string;
+	onOpen?: EventedListener;
+	onClose?: EventedListener;
+} & MPopupOptions;
 
 export type TerrainOptions = Partial<{
 	sky: SkyPaint;
