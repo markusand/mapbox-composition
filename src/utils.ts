@@ -1,13 +1,14 @@
-export const debounce = (fn, timeout = 100) => {
-	let timer;
-	return (...args) => {
+export const debounce = (fn: Function, timeout: number): Function => {
+	let timer: ReturnType<typeof setTimeout>;
+	return (...args: unknown[]) => {
 		clearTimeout(timer);
 		timer = setTimeout(() => { fn(...args); }, timeout);
 	};
 };
 
-export const uuid = () => Math.random().toString(36).substring(7);
+export const uuid = (): string => Math.random().toString(36).substring(7);
 
-export const isObject = item => !!item && item.constructor === Object;
+type Constructed = { constructor: ObjectConstructor };
+export const isObject = (item: unknown): boolean => !!item && (item as Constructed).constructor === Object;
 
-export const toArray = item => (Array.isArray(item) ? item : [item]);
+export const toArray = <T>(item: T): T[] => (Array.isArray(item) ? item : [item]);
