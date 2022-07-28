@@ -1,8 +1,11 @@
-export default (map, options) => {
-	Object.entries(options).forEach(([key, value]) => {
+import type { Map } from 'mapbox-gl';
+import type { MapEventHandlers } from '../types';
+
+export default (map: Map, options: Partial<MapEventHandlers>) => {
+	Object.entries(options).forEach(([key, callback]) => {
 		if (key.startsWith('on')) {
-			const eventName = key.slice(2).toLowerCase();
-			map.on(eventName, value);
+			const event = key.slice(2).toLowerCase();
+			map.on(event, callback);
 		}
 	});
 };
