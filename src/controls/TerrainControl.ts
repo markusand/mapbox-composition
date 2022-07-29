@@ -1,8 +1,13 @@
 import { IControl } from 'mapbox-gl';
 import type { Map } from 'mapbox-gl';
-import type { TerrainControlOptions } from '../types';
 import useTerrain from '../terrain';
 import './terrain.control.css';
+import type { ControlOptions } from '.';
+import type { TerrainExtrusion, TerrainOptions } from '../terrain';
+
+export type TerrainControlOptions = {
+  extrudeOnInit?: boolean,
+} & ControlOptions & TerrainExtrusion & TerrainOptions;
 
 export default class TerraineControl implements IControl {
   _options: TerrainControlOptions;

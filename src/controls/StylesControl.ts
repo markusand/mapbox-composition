@@ -1,9 +1,20 @@
 import { IControl } from 'mapbox-gl';
 import type { Map } from 'mapbox-gl';
-import type { Style, StylesControlOptions } from '../types';
 import './styles.control.css';
+import type { ControlOptions } from '.';
 
-const defaults = [
+type Style = {
+  name: string;
+  url: string;
+  label?: string;
+  img?: string;
+};
+
+export type StylesControlOptions = {
+  styles?: Style[];
+} & ControlOptions;
+
+const defaults: Style[] = [
   {
     name: 'Mapbox Light',
     url: 'mapbox://styles/mapbox/light-v10',

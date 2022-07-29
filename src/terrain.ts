@@ -1,7 +1,16 @@
-import type { Map } from 'mapbox-gl';
-import type { TerrainOptions, TerrainExtrusion } from './types';
+import type { Map, SkyPaint, Fog, RasterDemSource } from 'mapbox-gl';
 
-const defaults: { TERRAIN: TerrainOptions, SKY: TerrainOptions['sky'], FOG: TerrainOptions['fog'] } = {
+export type TerrainOptions = Partial<{
+  sky: SkyPaint;
+  fog: Fog;
+} & RasterDemSource>;
+
+export type TerrainExtrusion = {
+  exaggeration?: number;
+  pitch?: number;
+};
+
+const defaults: { TERRAIN: TerrainOptions, SKY: SkyPaint, FOG: Fog } = {
   TERRAIN: {
     type: 'raster-dem',
     url: 'mapbox://mapbox.mapbox-terrain-dem-v1',

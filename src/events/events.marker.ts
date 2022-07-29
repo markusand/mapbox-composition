@@ -1,5 +1,5 @@
 import type { Marker } from 'mapbox-gl';
-import type { MarkerOptions } from '../types';
+import type { MarkerOptions } from '../marker';
 
 export default ({ onDragStart, onDrag, onDragEnd }: MarkerOptions) => {
   const bindMarkerEvents = (marker: Marker) => {

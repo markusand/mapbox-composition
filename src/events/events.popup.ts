@@ -1,5 +1,5 @@
 import type { Popup } from 'mapbox-gl';
-import type { PopupOptions } from '../types';
+import type { PopupOptions } from '../popup';
 
 export default ({ onOpen, onClose }: PopupOptions) => {
   const bindPopupEvents = (popup: Popup) => {

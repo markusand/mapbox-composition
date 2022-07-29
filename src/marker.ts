@@ -1,18 +1,28 @@
-import { Marker as MMarker } from 'mapbox-gl';
-import type { Map, LngLatLike } from 'mapbox-gl';
-import type { Popup, Marker, MarkerOptions } from './types';
+import { Marker } from 'mapbox-gl';
+import type { Map, LngLatLike, EventedListener, MarkerOptions as MMarkerOptions } from 'mapbox-gl';
 import { useMarkerEvents } from './events';
+import Popup from './popup';
 
-export default (map: Map, options: MarkerOptions): Marker => {
+type MarkerPopup = ReturnType<typeof Popup>;
+
+export type MarkerOptions = {
+  coordinates: LngLatLike;
+  popup?: MarkerPopup;
+  onDragStart?: EventedListener,
+  onDrag?: EventedListener,
+  onDragEnd?: EventedListener;
+} & MMarkerOptions;
+
+export default (map: Map, options: MarkerOptions) => {
   const { coordinates, popup, ...rest } = options;
   const { bindMarkerEvents } = useMarkerEvents(options);
 
-  const marker = new MMarker(rest);
-  let _popup: Popup;
+  const marker = new Marker(rest);
+  let markerPopup: MarkerPopup;
 
   const setLocation = (location: LngLatLike) => { marker.setLngLat(location).addTo(map); };
-  const setPopup = (newPopup: Popup) => {
-    _popup = newPopup;
+  const setPopup = (newPopup: MarkerPopup) => {
+    markerPopup = newPopup;
     marker.setPopup(newPopup.popup);
   };
 
@@ -24,7 +34,7 @@ export default (map: Map, options: MarkerOptions): Marker => {
   return {
     setLocation,
     get marker() { return marker; },
-    get popup() { return _popup; },
+    get popup() { return markerPopup; },
     set popup(newPopup) { setPopup(newPopup); },
   };
 };

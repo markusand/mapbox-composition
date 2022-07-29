@@ -1,5 +1,5 @@
 import type { Map, MapLayerMouseEvent } from 'mapbox-gl';
-import type { BaseLayerOptions } from '../types';
+import type { BaseLayerOptions } from '../layer';
 
 export default (map: Map, { onClick, onHover }: BaseLayerOptions) => {
   const layerClickHandler = (event: MapLayerMouseEvent) => onClick?.(event);

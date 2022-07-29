@@ -1,5 +1,5 @@
 import type { Map, MapSourceDataEvent } from 'mapbox-gl';
-import type { BaseLayerOptions } from '../types';
+import type { BaseLayerOptions } from '../layer';
 
 export default (map: Map, sourceId: string, options: BaseLayerOptions) => {
   const { onError, onLoadStart, onLoadEnd } = options;

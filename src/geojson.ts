@@ -1,7 +1,11 @@
 import type { Map, GeoJSONSourceRaw, GeoJSONSource } from 'mapbox-gl';
-
-import type { GeoJSONLayerOptions } from './types';
+import type { Feature, Geometry, FeatureCollection } from 'geojson';
+import type { BaseLayerOptions } from './layer';
 import useLayer from './layer';
+
+type GeoJSONLayerOptions = {
+  source: Feature<Geometry> | FeatureCollection<Geometry> | string,
+} & BaseLayerOptions;
 
 export default (map: Map, options: GeoJSONLayerOptions) => {
   // Adapt to GeoJSON source format

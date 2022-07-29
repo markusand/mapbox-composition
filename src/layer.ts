@@ -1,9 +1,29 @@
-import type { Map, AnySourceData, AnyLayer, EventedListener } from 'mapbox-gl';
-import type { Layer, BaseLayerOptions, LayerOptions } from './types';
+import type { Map, AnySourceData, AnyLayer, Source, Layer, EventedListener } from 'mapbox-gl';
 import { useSourceEvents, useLayerEvents } from './events';
 import { isObject } from './utils';
 
-export default (map: Map, options: BaseLayerOptions): Layer => {
+type LayerOptions = {
+  name: string;
+  visible?: boolean;
+  under?: string;
+  filter?: any[];
+} & Layer;
+
+export type BaseLayerOptions = {
+  name: string;
+  type: Source['type'];
+  source: AnySourceData | string;
+  layers: LayerOptions[];
+  persist?: boolean;
+  under?: string;
+  onError?: EventedListener,
+  onLoadStart?: EventedListener,
+  onLoadEnd?: EventedListener,
+  onClick?: EventedListener,
+  onHover?: EventedListener,
+};
+
+export default (map: Map, options: BaseLayerOptions) => {
   const { bindSourceEvents, unbindSourceEvents } = useSourceEvents(map, options.name, options);
   const { bindLayerEvents, unbindLayerEvents } = useLayerEvents(map, options);
   const LAYERS: Record<string, LayerOptions> = {};

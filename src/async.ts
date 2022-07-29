@@ -2,7 +2,7 @@ import type { Map, MapboxEvent, EventData } from 'mapbox-gl';
 
 type Event = MapboxEvent<MouseEvent | TouchEvent | WheelEvent | undefined> & EventData;
 
-export const ACTIONS = ['panBy', 'panTo', 'zoomTo', 'zoomIn', 'zoomOut', 'rotateTo', 'resetNorth', 'snapToNorth', 'fitBounds', 'fitScreenCoordinates', 'jumpTo', 'easeTo', 'flyTo'] as const;
+const ACTIONS = ['panBy', 'panTo', 'zoomTo', 'zoomIn', 'zoomOut', 'rotateTo', 'resetNorth', 'snapToNorth', 'fitBounds', 'fitScreenCoordinates', 'jumpTo', 'easeTo', 'flyTo'] as const;
 
 export default (map: Map, actions = ACTIONS) => actions.reduce((acc, action) => {
   const eventName = action.toLowerCase();

@@ -1,5 +1,9 @@
-import type { Map } from 'mapbox-gl';
-import type { MapEventHandlers } from '../types';
+import type { Map, MapEventType, EventData } from 'mapbox-gl';
+
+export type MapEventHandlers = Record<
+`on${Capitalize<keyof MapEventType>}`,
+(event: MapEventType & EventData) => void
+>;
 
 export default (map: Map, options: Partial<MapEventHandlers>) => {
   Object.entries(options).forEach(([key, callback]) => {

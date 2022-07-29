@@ -1,7 +1,12 @@
 import { Map } from 'mapbox-gl';
-import type { MapOptions } from './types';
+import type { MapboxOptions } from 'mapbox-gl';
+import type { MapEventHandlers } from './events/events.map';
 import { useMapEvents } from './events';
 import { debounce } from './utils';
+
+type MapOptions = Omit<MapboxOptions, 'container'>
+& Partial<MapEventHandlers>
+& { debounceTime?: number };
 
 export default async (container: string | HTMLElement, options: MapOptions) => {
   const { debounceTime = 100, ...rest } = options;
