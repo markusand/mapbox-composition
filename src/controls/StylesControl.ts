@@ -1,6 +1,5 @@
 import { IControl } from 'mapbox-gl';
 import type { Map } from 'mapbox-gl';
-import './styles.control.css';
 import type { ControlOptions } from '.';
 
 type Style = {
@@ -19,13 +18,11 @@ const defaults: Style[] = [
     name: 'Mapbox Light',
     url: 'mapbox://styles/mapbox/light-v10',
     label: 'Light',
-    // img: '/images/map/thumb.contours.jpg',
   },
   {
     name: 'Mapbox Satellite',
     url: 'mapbox://styles/mapbox/satellite-v9',
     label: 'Satellite',
-    // img: '/images/map/thumb.satellite.jpg',
   },
 ];
 
