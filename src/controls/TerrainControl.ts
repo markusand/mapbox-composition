@@ -1,23 +1,29 @@
+import { IControl } from 'mapbox-gl';
+import { Map } from 'mapbox-gl';
+import type { TerrainControlOptions } from '../types';
 import useTerrain from '../terrain';
 import './terrain.control.css';
 
-export default class TerrainControl {
-	constructor(options = {}) {
-		this._options = options;
-	}
+export default class TerrainControl implements IControl {
+	_options: TerrainControlOptions;
+	_container: HTMLElement;
 
-	onAdd(map) {
-		const { extrudeOnInit = false, exaggeration, pitch, ...options } = this._options;
-		const terrain = useTerrain(map, options);
+	constructor(options: TerrainControlOptions = {}) {
+		this._options = options;
 
 		this._container = document.createElement('div');
 		this._container.classList.add('mapboxgl-ctrl', 'mapboxgl-ctrl-group');
+	}
+
+	onAdd(map: Map) {
+		const { extrudeOnInit = false, exaggeration, pitch = 1, ...options } = this._options;
+		const terrain = useTerrain(map, options);
 
 		const button = document.createElement('button');
 		button.classList.add('mapboxgl-ctrl-terrain');
 		this._container.appendChild(button);
 
-		const extrude = doExtrude => {
+		const extrude = (doExtrude: boolean) => {
 			if (doExtrude) terrain.extrude({ exaggeration, pitch });
 			else terrain.flatten();
 			button.classList.toggle('mapboxgl-ctrl-terrain-3d', doExtrude);
@@ -34,6 +40,6 @@ export default class TerrainControl {
 	}
 
 	onRemove() {
-		this._container.parentNode.removeChild(this._container);
+		this._container.parentNode?.removeChild(this._container);
 	}
 }

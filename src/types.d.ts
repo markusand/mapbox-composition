@@ -102,6 +102,13 @@ export type MarkerOptions = {
 export type TerrainOptions = Partial<{
 	sky: SkyPaint;
 	fog: Fog;
-}> & RasterDemSource;
+} & RasterDemSource>;
 
-export type TerrainExtrusion = TerrainSpecification & { pitch: number };
+export type TerrainExtrusion = {
+	exaggeration?: number;
+	pitch?: number;
+};
+
+export type TerrainControlOptions = {
+	extrudeOnInit?: boolean,
+} & TerrainExtrusion & TerrainOptions;

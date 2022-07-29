@@ -23,7 +23,7 @@ export default (map: Map, options: TerrainOptions) => {
 	const { sky = defaults.SKY, fog = defaults.FOG, ...terrain } = options;
 
 	const extrude = ({ exaggeration = 1.5, pitch = 45 }: TerrainExtrusion) => {
-		map.addSource('mapboxgl-dem', terrain);
+		map.addSource('mapboxgl-dem', { type: 'raster-dem', ...terrain });
 		map.setTerrain({ source: 'mapboxgl-dem', exaggeration });
 		map.easeTo({ pitch });
 		if (fog) map.setFog(fog);

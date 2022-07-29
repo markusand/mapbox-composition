@@ -50,7 +50,7 @@ export default (map: Map) => {
 		addControl('styles', position, new StylesControl(config))
 	);
 
-	const addTerrain = ({ position = 'top-right', ...config } = {}) => (
+	const addTerrain = ({ position = 'top-right', ...config }: ControlOptions = {}) => (
 		addControl('terrain', position, new TerrainControl(config))
 	);
 
