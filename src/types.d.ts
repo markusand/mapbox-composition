@@ -112,3 +112,14 @@ export type TerrainExtrusion = {
 export type TerrainControlOptions = {
 	extrudeOnInit?: boolean,
 } & TerrainExtrusion & TerrainOptions;
+
+export type Style = {
+	name: string;
+	url: string;
+	label?: string;
+	img?: string;
+};
+
+export type StylesControlOptions = {
+	styles: BaseStyle[];
+}

@@ -46,7 +46,7 @@ export default (map: Map) => {
 		addControl('fullscreen', position, new FullscreenControl(config))
 	);
 
-	const addStyles = ({ position = 'top-right', ...config } = {}) => (
+	const addStyles = ({ position = 'top-right', ...config }: ControlOptions = {}) => (
 		addControl('styles', position, new StylesControl(config))
 	);
 
