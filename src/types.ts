@@ -3,6 +3,7 @@ import type {
   MapEventType,
   LngLatLike,
   EventedListener,
+  EventData,
   Source as MSource,
   AnySourceData,
   Layer as MLayer,
@@ -16,8 +17,6 @@ import type {
 } from 'mapbox-gl';
 
 import type { Feature, Geometry, FeatureCollection } from 'geojson';
-
-declare module 'mapbox-composition';
 
 export type MapEventHandlers = Record<
 `on${Capitalize<keyof MapEventType>}`,
@@ -123,5 +122,5 @@ export type Style = {
 };
 
 export type StylesControlOptions = {
-  styles?: BaseStyle[];
+  styles?: Style[];
 } & ControlOptions;
