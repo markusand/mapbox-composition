@@ -3,6 +3,21 @@ import type { Map } from 'mapbox-gl';
 import type { Style, StylesControlOptions } from '../types';
 import './styles.control.css';
 
+const defaults = [
+  {
+    name: 'Mapbox Light',
+    url: 'mapbox://styles/mapbox/light-v10',
+    label: 'Light',
+    // img: '/images/map/thumb.contours.jpg',
+  },
+  {
+    name: 'Mapbox Satellite',
+    url: 'mapbox://styles/mapbox/satellite-v9',
+    label: 'Satellite',
+    // img: '/images/map/thumb.satellite.jpg',
+  },
+];
+
 export default class StylesControl implements IControl {
   _styles: Style[];
 
@@ -14,8 +29,8 @@ export default class StylesControl implements IControl {
 
   _buttons: HTMLElement[] | undefined;
 
-  constructor({ styles }: StylesControlOptions) {
-    this._styles = styles;
+  constructor(options?: StylesControlOptions) {
+    this._styles = options?.styles || defaults;
     this._setActive = this._setActive.bind(this);
 
     this._container = document.createElement('div');

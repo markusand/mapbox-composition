@@ -105,9 +105,15 @@ export type TerrainExtrusion = {
   pitch?: number;
 };
 
+export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+
+export type ControlOptions = {
+  position?: ControlPosition;
+} & Record<string, any>;
+
 export type TerrainControlOptions = {
   extrudeOnInit?: boolean,
-} & TerrainExtrusion & TerrainOptions;
+} & ControlOptions & TerrainExtrusion & TerrainOptions;
 
 export type Style = {
   name: string;
@@ -117,5 +123,5 @@ export type Style = {
 };
 
 export type StylesControlOptions = {
-  styles: BaseStyle[];
-};
+  styles?: BaseStyle[];
+} & ControlOptions;

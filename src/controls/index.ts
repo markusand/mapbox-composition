@@ -1,12 +1,8 @@
 import { NavigationControl, ScaleControl, GeolocateControl, AttributionControl, FullscreenControl } from 'mapbox-gl';
 import type { Map, IControl } from 'mapbox-gl';
+import type { ControlOptions, ControlPosition, TerrainControlOptions, StylesControlOptions } from '../types';
 import StylesControl from './StylesControl';
 import TerrainControl from './TerrainControl';
-
-type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
-type ControlOptions = {
-  position?: ControlPosition;
-} & Record<string, any>;
 
 export default (map: Map) => {
   const CONTROLS: Record<string, IControl> = {};
@@ -46,11 +42,11 @@ export default (map: Map) => {
     addControl('fullscreen', position, new FullscreenControl(config))
   );
 
-  const addStyles = ({ position = 'top-right', ...config }: ControlOptions = {}) => (
+  const addStyles = ({ position = 'top-right', ...config }: StylesControlOptions = {}) => (
     addControl('styles', position, new StylesControl(config))
   );
 
-  const addTerrain = ({ position = 'top-right', ...config }: ControlOptions = {}) => (
+  const addTerrain = ({ position = 'top-right', ...config }: TerrainControlOptions = {}) => (
     addControl('terrain', position, new TerrainControl(config))
   );
 
