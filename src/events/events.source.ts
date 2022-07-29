@@ -1,23 +1,26 @@
-export default (map, sourceId, { onError, onLoadStart, onLoadEnd }) => {
+import type { Map, MapSourceDataEvent } from 'mapbox-gl';
+import type { BaseLayerOptions } from '../types';
+
+export default (map: Map, sourceId: string, { onError, onLoadStart, onLoadEnd }: BaseLayerOptions) => {
 	let isSourceLoading = false;
 
-	const sourceLoadStartHandler = event => {
+	const sourceLoadStartHandler = (event: MapSourceDataEvent) => {
 		const { sourceDataType = 'content' } = event; // Little hack here
 		if (event.sourceId === sourceId && !isSourceLoading && sourceDataType === 'content') {
-			if (onLoadStart) onLoadStart(event);
+			onLoadStart?.(event);
 			isSourceLoading = true;
 		}
 	};
 
-	const sourceLoadEndHandler = event => {
+	const sourceLoadEndHandler = (event: MapSourceDataEvent) => {
 		if (event.sourceId === sourceId && isSourceLoading && map.isSourceLoaded(sourceId)) {
-			if (onLoadEnd) onLoadEnd(event);
+			onLoadEnd?.(event);
 			isSourceLoading = false;
 		}
 	};
 
-	const sourceErrorHandler = event => {
-		if (event.sourceId === sourceId) onError(event.error);
+	const sourceErrorHandler = (event: any) => {
+		if (event.sourceId === sourceId) onError?.(event.error);
 	};
 
 	const bindSourceEvents = () => {

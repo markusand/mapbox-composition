@@ -1,8 +1,11 @@
-export default (map, { onClick, onHover }) => {
-	const layerClickHandler = event => onClick(event);
-	const layerHoverHandler = event => onHover(event);
+import type { Map, MapLayerMouseEvent } from 'mapbox-gl';
+import type { BaseLayerOptions } from '../types';
 
-	const bindLayerEvents = layerId => {
+export default (map: Map, { onClick, onHover }: BaseLayerOptions) => {
+	const layerClickHandler = (event: MapLayerMouseEvent) => onClick?.(event);
+	const layerHoverHandler = (event: MapLayerMouseEvent) => onHover?.(event);
+
+	const bindLayerEvents = (layerId: string) => {
 		if (onClick) map.on('click', layerId, layerClickHandler);
 		if (onHover) {
 			map.on('mouseenter', layerId, layerHoverHandler);
@@ -11,7 +14,7 @@ export default (map, { onClick, onHover }) => {
 		}
 	};
 
-	const unbindLayerEvents = layerId => {
+	const unbindLayerEvents = (layerId: string) => {
 		map.off('click', layerId, layerClickHandler);
 		map.off('mouseenter', layerId, layerHoverHandler);
 		map.off('mousemove', layerId, layerHoverHandler);

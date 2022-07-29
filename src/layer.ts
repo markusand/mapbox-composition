@@ -1,24 +1,26 @@
+import type { Map, AnySourceData, AnyLayer, EventedListener } from 'mapbox-gl';
+import type { Layer, BaseLayerOptions, LayerOptions } from './types';
 import { useSourceEvents, useLayerEvents } from './events';
 import { isObject } from './utils';
 
-export default (map, options = {}) => {
+export default (map: Map, options: BaseLayerOptions): Layer => {
 	const { bindSourceEvents, unbindSourceEvents } = useSourceEvents(map, options.name, options);
 	const { bindLayerEvents, unbindLayerEvents } = useLayerEvents(map, options);
-	const LAYERS = {};
+	const LAYERS: Record<string, LayerOptions> = {};
 
-	const isVisible = id => map.getLayoutProperty(id, 'visibility') === 'visible';
+	const isVisible = (layerId: string) => map.getLayoutProperty(layerId, 'visibility') === 'visible';
 
-	const setVisibility = (visible, layers = Object.keys(LAYERS)) => {
-		const visibility = visible ? 'visible' : 'none';
-		layers.forEach(id => {
-			LAYERS[id].visible = visible;
+	const setVisibility = (isVisible: boolean, layerIds = Object.keys(LAYERS)) => {
+		const visibility = isVisible ? 'visible' : 'none';
+		layerIds.forEach(id => {
+			LAYERS[id].visible = isVisible;
 			map.setLayoutProperty(id, 'visibility', visibility);
 		});
 	};
 
-	const setFilters = (filters = [], layers = Object.keys(LAYERS)) => {
+	const setFilters = (filters: any[] = [], layerIds = Object.keys(LAYERS)) => {
 		const all = isObject(filters) ? ['all', ...Object.values(filters).filter(Boolean)] : filters;
-		layers.forEach(id => {
+		layerIds.forEach(id => {
 			LAYERS[id].filter = all && all.length ? all : LAYERS[id].filter;
 			map.setFilter(id, LAYERS[id].filter);
 		});
@@ -27,8 +29,8 @@ export default (map, options = {}) => {
 	/* eslint-disable-next-line no-use-before-define */ /* Trust in function hoisting */
 	const persistLayerHandler = () => addLayers(Object.values(LAYERS));
 
-	const clearLayers = (layers = Object.keys(LAYERS)) => {
-		layers.forEach(id => {
+	const clearLayers = (layerIds: string[] = Object.keys(LAYERS)) => {
+		layerIds.forEach(id => {
 			unbindLayerEvents(id);
 			if (map.getLayer(id)) map.removeLayer(id);
 			if (id in LAYERS) delete LAYERS[id];
@@ -36,10 +38,10 @@ export default (map, options = {}) => {
 		map.off('style.load', persistLayerHandler);
 	};
 
-	const updateLayers = (layers = []) => {
+	const updateLayers = (layers: LayerOptions[] = []) => {
 		layers.forEach(layer => {
-			const { name, visibility, filter, under, paint = {}, layout = {} } = layer;
-			if (visibility !== undefined) setVisibility(visibility, [name]);
+			const { name, visible, filter, under, paint = {}, layout = {} } = layer;
+			if (visible !== undefined) setVisibility(visible, [name]);
 			if (filter !== undefined) setFilters(filter, [name]);
 			if (under && map.getLayer(under)) map.moveLayer(name, under);
 			Object.entries(paint).forEach(([prop, val]) => map.setPaintProperty(name, prop, val));
@@ -48,23 +50,23 @@ export default (map, options = {}) => {
 		});
 	};
 
-	const addLayers = (layers = []) => {
+	const addLayers = (layers: LayerOptions[]) => {
 		const { name: sourceName, persist = true, under: globalUnder } = options;
 		layers.forEach(({ name, under = globalUnder, visible = true, ...params }, i) => {
 			const id = name || `${sourceName}--${i}`;
 			LAYERS[id] = { name, under, visible, ...params };
-			const zPosition = map.getLayer(under) ? under : undefined;
-			map.addLayer({ id, source: sourceName, ...params }, zPosition);
+			const zPosition = under && map.getLayer(under) ? under : undefined;
+			map.addLayer({ ...params, source: sourceName, id } as AnyLayer, zPosition);
 			setVisibility(visible, [id]);
 			bindLayerEvents(id);
 		});
 		if (persist) map.once('style.load', persistLayerHandler);
 	};
 
-	const hasLayer = id => !!LAYERS[id] && !!map.getLayer(id);
+	const hasLayer = (id: string) => !!LAYERS[id] && !!map.getLayer(id);
 
 	// Source handler is overriden every time to maintain the last available source
-	let persistSourceHandler;
+	let persistSourceHandler: EventedListener;
 
 	const clearSource = () => {
 		const { name } = options;
@@ -74,11 +76,11 @@ export default (map, options = {}) => {
 		map.off('style.load', persistSourceHandler);
 	};
 
-	const setSource = source => {
+	const setSource = (source: AnySourceData | string) => {
 		const { name, type, persist = true } = options;
 		const key = type === 'geojson' ? 'data' : 'url';
-		const content = isObject(source) ? source : { [key]: source };
-		map.addSource(name, { type, ...content });
+		const content = typeof source === 'string' ? { [key]: source } : source;
+		map.addSource(name, { ...content, type } as AnySourceData);
 		bindSourceEvents();
 		if (persist) {
 			persistSourceHandler = () => setSource(source);
@@ -86,7 +88,7 @@ export default (map, options = {}) => {
 		}
 	};
 
-	const updateSource = (source, layers = options.layers) => {
+	const updateSource = (source: AnySourceData | string, layers = options.layers) => {
 		clearSource();
 		setSource(source);
 		addLayers(layers);
