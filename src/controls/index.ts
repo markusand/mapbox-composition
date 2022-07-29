@@ -1,42 +1,48 @@
 import { NavigationControl, ScaleControl, GeolocateControl, AttributionControl, FullscreenControl } from 'mapbox-gl';
+import type { Map, IControl } from 'mapbox-gl';
 import StylesControl from './StylesControl';
 import TerrainControl from './TerrainControl';
 
-export default map => {
-	const CONTROLS = {};
+type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+type ControlOptions = {
+	position?: ControlPosition;
+} & Record<string, any>;
 
-	const addControl = (name, position, control) => {
+export default (map: Map) => {
+	const CONTROLS: Record<string, IControl> = {};
+
+	const addControl = (name: string, position: ControlPosition, control: IControl) => {
 		CONTROLS[name] = control;
 		map.addControl(control, position);
 		return control;
 	};
 
-	const removeControl = name => {
+	const removeControl = (name: string) => {
 		if (CONTROLS[name]) {
 			map.removeControl(CONTROLS[name]);
 			delete CONTROLS[name];
 		}
 	};
 
-	const hasControl = name => !!CONTROLS[name] && map.hasControl(CONTROLS[name]);
+	const hasControl = (name: string) => !!CONTROLS[name] && map.hasControl(CONTROLS[name]);
 
-	const addNavigation = ({ position = 'top-right', ...config } = {}) => (
+	const addNavigation = ({ position = 'top-right', ...config }: ControlOptions = {}) => (
 		addControl('navigation', position, new NavigationControl(config))
 	);
 
-	const addScale = ({ position = 'bottom-left', ...config } = {}) => (
+	const addScale = ({ position = 'bottom-left', ...config }: ControlOptions = {}) => (
 		addControl('scale', position, new ScaleControl(config))
 	);
 
-	const addGeolocate = ({ position = 'top-right', ...config } = {}) => (
+	const addGeolocate = ({ position = 'top-right', ...config }: ControlOptions = {}) => (
 		addControl('geolocate', position, new GeolocateControl(config))
 	);
 
-	const addAttribution = ({ position = 'bottom-right', ...config } = {}) => (
+	const addAttribution = ({ position = 'bottom-right', ...config }: ControlOptions = {}) => (
 		addControl('attribution', position, new AttributionControl(config))
 	);
 
-	const addFullscreen = ({ position = 'top-right', ...config } = {}) => (
+	const addFullscreen = ({ position = 'top-right', ...config }: ControlOptions = {}) => (
 		addControl('fullscreen', position, new FullscreenControl(config))
 	);
 
