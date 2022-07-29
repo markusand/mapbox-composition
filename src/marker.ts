@@ -1,16 +1,18 @@
-import { Marker } from 'mapbox-gl';
+import { Marker as MMarker } from 'mapbox-gl';
+import type { Map, LngLatLike } from 'mapbox-gl';
+import type { Popup, Marker, MarkerOptions } from './types';
 import { useMarkerEvents } from './events';
 
-export default (map, options = {}) => {
+export default (map: Map, options: MarkerOptions): Marker => {
 	const { coordinates, popup, ...rest } = options;
 	const { bindMarkerEvents } = useMarkerEvents(options);
 
-	const marker = new Marker({ ...rest });
-	let markerPopup;
+	const marker = new MMarker(rest);
+	let _popup: Popup;
 
-	const setLocation = coords => marker.setLngLat(coords).addTo(map);
-	const setPopup = newPopup => {
-		markerPopup = newPopup;
+	const setLocation = (location: LngLatLike) => { marker.setLngLat(location).addTo(map); };
+	const setPopup = (newPopup: Popup) => {
+		_popup = newPopup;
 		marker.setPopup(newPopup.popup);
 	};
 
@@ -22,7 +24,7 @@ export default (map, options = {}) => {
 	return {
 		setLocation,
 		get marker() { return marker; },
-		get popup() { return markerPopup; },
+		get popup() { return _popup; },
 		set popup(newPopup) { setPopup(newPopup); },
 	};
 };

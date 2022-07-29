@@ -5,6 +5,8 @@ import type {
 	EventedListener,
 	Popup as MPopup,
 	PopupOptions as MPopupOptions,
+	Marker as MMarker,
+	MarkerOptions as MMarkerOptions,
 	SkyPaint,
 	TerrainSpecification,
 	Fog,
@@ -36,6 +38,20 @@ export type PopupOptions = {
 	onOpen?: EventedListener;
 	onClose?: EventedListener;
 } & MPopupOptions;
+
+export type Marker = {
+	marker: MMarker;
+	popup: Popup;
+	setLocation: (location: LngLatLike) => void;
+};
+
+export type MarkerOptions = {
+	coordinates: LngLatLike;
+	popup?: Popup;
+	onDragStart?: EventedListener,
+	onDrag?: EventedListener,
+	onDragEnd?: EventedListener;
+} & MMarkerOptions;
 
 export type TerrainOptions = Partial<{
 	sky: SkyPaint;
