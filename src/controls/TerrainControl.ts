@@ -1,45 +1,46 @@
 import { IControl } from 'mapbox-gl';
-import { Map } from 'mapbox-gl';
+import type { Map } from 'mapbox-gl';
 import type { TerrainControlOptions } from '../types';
 import useTerrain from '../terrain';
 import './terrain.control.css';
 
-export default class TerrainControl implements IControl {
-	_options: TerrainControlOptions;
-	_container: HTMLElement;
+export default class TerraineControl implements IControl {
+  _options: TerrainControlOptions;
 
-	constructor(options: TerrainControlOptions = {}) {
-		this._options = options;
+  _container: HTMLElement;
 
-		this._container = document.createElement('div');
-		this._container.classList.add('mapboxgl-ctrl', 'mapboxgl-ctrl-group');
-	}
+  constructor(options: TerrainControlOptions = {}) {
+    this._options = options;
 
-	onAdd(map: Map) {
-		const { extrudeOnInit = false, exaggeration, pitch = 1, ...options } = this._options;
-		const terrain = useTerrain(map, options);
+    this._container = document.createElement('div');
+    this._container.classList.add('mapboxgl-ctrl', 'mapboxgl-ctrl-group');
+  }
 
-		const button = document.createElement('button');
-		button.classList.add('mapboxgl-ctrl-terrain');
-		this._container.appendChild(button);
+  onAdd(map: Map) {
+    const { extrudeOnInit = false, exaggeration, pitch = 1, ...options } = this._options;
+    const terrain = useTerrain(map, options);
 
-		const extrude = (doExtrude: boolean) => {
-			if (doExtrude) terrain.extrude({ exaggeration, pitch });
-			else terrain.flatten();
-			button.classList.toggle('mapboxgl-ctrl-terrain-3d', doExtrude);
-		};
+    const button = document.createElement('button');
+    button.classList.add('mapboxgl-ctrl-terrain');
+    this._container.appendChild(button);
 
-		button.addEventListener('click', () => extrude(!terrain.isExtruded()));
+    const extrude = (doExtrude: boolean) => {
+      if (doExtrude) terrain.extrude({ exaggeration, pitch });
+      else terrain.flatten();
+      button.classList.toggle('mapboxgl-ctrl-terrain-3d', doExtrude);
+    };
 
-		// Reload terrain extrusion state on map style change
-		map.on('style.load', () => extrude(terrain.isExtruded()));
+    button.addEventListener('click', () => extrude(!terrain.isExtruded()));
 
-		extrude(extrudeOnInit);
+    // Reload terrain extrusion state on map style change
+    map.on('style.load', () => extrude(terrain.isExtruded()));
 
-		return this._container;
-	}
+    extrude(extrudeOnInit);
 
-	onRemove() {
-		this._container.parentNode?.removeChild(this._container);
-	}
+    return this._container;
+  }
+
+  onRemove() {
+    this._container.parentNode?.removeChild(this._container);
+  }
 }

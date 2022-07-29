@@ -4,66 +4,70 @@ import type { Style, StylesControlOptions } from '../types';
 import './styles.control.css';
 
 export default class StylesControl implements IControl {
-	_styles: Style[];
-	_active: string | undefined;
-	_map: Map | undefined;
-	_container: HTMLElement;
-	_buttons: HTMLElement[] | undefined;
+  _styles: Style[];
 
-	constructor({ styles }: StylesControlOptions) {
-		this._styles = styles;
-		this._setActive = this._setActive.bind(this);
+  _active: string | undefined;
 
-		this._container = document.createElement('div');
-		this._container.classList.add('mapboxgl-ctrl', 'mapboxgl-ctrl-group', 'mapboxgl-ctrl-styles');
-	}
+  _map: Map | undefined;
 
-	onAdd(map: Map) {
-		this._map = map;
+  _container: HTMLElement;
 
-		this._container = document.createElement('div');
-		this._container.classList.add('mapboxgl-ctrl', 'mapboxgl-ctrl-group', 'mapboxgl-ctrl-styles');
+  _buttons: HTMLElement[] | undefined;
 
-		this._buttons = this._styles.map((style, i) => {
-			const button = document.createElement('button');
-			if (style.img) {
-				const thumbnail = document.createElement('img');
-				thumbnail.src = style.img;
-				button.appendChild(thumbnail);
-			} else {
-				const label = document.createElement('span');
-				label.textContent = style.label || `Style ${i}`;
-				button.appendChild(label);
-			}
+  constructor({ styles }: StylesControlOptions) {
+    this._styles = styles;
+    this._setActive = this._setActive.bind(this);
 
-			button.addEventListener('click', () => {
-				if (this._active !== style.name) map.setStyle(style.url);
-			});
+    this._container = document.createElement('div');
+    this._container.classList.add('mapboxgl-ctrl', 'mapboxgl-ctrl-group', 'mapboxgl-ctrl-styles');
+  }
 
-			this._container.appendChild(button);
+  onAdd(map: Map) {
+    this._map = map;
 
-			return button;
-		});
+    this._container = document.createElement('div');
+    this._container.classList.add('mapboxgl-ctrl', 'mapboxgl-ctrl-group', 'mapboxgl-ctrl-styles');
 
-		this._map.on('style.load', this._setActive);
+    this._buttons = this._styles.map((style, i) => {
+      const button = document.createElement('button');
+      if (style.img) {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = style.img;
+        button.appendChild(thumbnail);
+      } else {
+        const label = document.createElement('span');
+        label.textContent = style.label || `Style ${i}`;
+        button.appendChild(label);
+      }
 
-		this._setActive();
+      button.addEventListener('click', () => {
+        if (this._active !== style.name) map.setStyle(style.url);
+      });
 
-		return this._container;
-	}
+      this._container.appendChild(button);
 
-	_setActive() {
-		if (!this._map || !this._buttons) return;
-		this._buttons.forEach(button => button.classList.remove('is-active'));
-		const { name } = this._map?.getStyle();
-		const index = this._styles.findIndex(style => style.name === name);
-		if (index >= 0) this._buttons[index].classList.add('is-active');
-		this._active = name;
-	}
+      return button;
+    });
 
-	onRemove() {
-		this._container.parentNode?.removeChild(this._container);
-		this._map?.off('style.load', this._setActive);
-		this._map = undefined;
-	}
+    this._map.on('style.load', this._setActive);
+
+    this._setActive();
+
+    return this._container;
+  }
+
+  _setActive() {
+    if (!this._map || !this._buttons) return;
+    this._buttons.forEach(button => button.classList.remove('is-active'));
+    const { name } = this._map?.getStyle() || {};
+    const index = this._styles.findIndex(style => style.name === name);
+    if (index >= 0) this._buttons[index].classList.add('is-active');
+    this._active = name;
+  }
+
+  onRemove() {
+    this._container.parentNode?.removeChild(this._container);
+    this._map?.off('style.load', this._setActive);
+    this._map = undefined;
+  }
 }
