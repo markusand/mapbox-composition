@@ -3,9 +3,9 @@
   "version": "1.8.0",
   "description": "Mapbox GL wrapper to use with Composition API",
   "main": "lib/index.js",
-  "module": "lib/index.esm.js",
+  "module": "lib/index.js",
   "scripts": {
-    "build": "rollup -c",
+    "build": "tsc",
     "prepare": "npm run build"
   },
   "author": "Marc Vilella <mvilella@obsa.ad> (https://github.com/markusand)",
