@@ -5,12 +5,17 @@
     "browser": true
   },
   "extends": [
-    "airbnb-base",
-    "eslint:recommended"
+    "eslint:recommended",
+    "airbnb-typescript/base",
+    "plugin:import/recommended",
+    "plugin:import/typescript"
   ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-tabs": "off",
-    "indent": ["error", "tab", { "SwitchCase": 1 }],
     "max-len": ["error", {
       "code": 100,
       "ignoreTrailingComments": true,
@@ -21,13 +26,13 @@
     "object-curly-newline": ["error", { "multiline": true }],
     "arrow-parens": ["error", "as-needed"],
     "object-shorthand": ["error", "always", { "avoidQuotes": false }],
-	"no-promise-executor-return": "off",
+    "no-promise-executor-return": "off",
     "no-nested-ternary": "off",
     "no-sparse-arrays": "off",
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],
-    "import/extensions": ["error", "always", {
+    "import/extensions": ["error", "ignorePackages", {
       "js": "never",
-      "vue": "never"
+      "ts": "never"
     }]
   }
 }
