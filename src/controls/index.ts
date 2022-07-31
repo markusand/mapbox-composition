@@ -7,6 +7,8 @@ import type { StylesControlOptions } from './StylesControl';
 
 type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
+export type ControlName = 'navigation' | 'scale' | 'geolocate' | 'attribution' | 'fullscreen' | 'styles' | 'terrain';
+
 export type ControlOptions = {
   position?: ControlPosition;
 } & Record<string, any>;
