@@ -11,23 +11,15 @@
   "author": "Marc Vilella <mvilella@obsa.ad> (https://github.com/markusand)",
   "license": "ISC",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^21.0.1",
-    "@rollup/plugin-node-resolve": "^13.1.1",
     "@types/geojson": "^7946.0.10",
     "@types/mapbox-gl": "^2.7.4",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
-    "autoprefixer": "^10.2.5",
     "eslint": "^8.5.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-import-resolver-typescript": "^3.3.0",
     "eslint-plugin-import": "^2.26.0",
     "mapbox-gl": "^2.3.0",
-    "postcss": "^8.2.13",
-    "rollup": "^2.41.5",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.0",
-    "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
