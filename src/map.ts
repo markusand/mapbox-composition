@@ -14,10 +14,16 @@ type MapOptions = {
 } & Omit<MapboxOptions, 'container'>
 & Partial<MapEventHandlers>;
 
+const defaults: MapOptions = {
+  style: 'mapbox://styles/mapbox/light-v10',
+  zoom: 15,
+  center: [1.531163, 42.508262],
+};
+
 export default async (container: string | HTMLElement, options: MapOptions) => {
   const { debounceTime = 100, controls, ...rest } = options;
 
-  const map = new Map({ container, ...rest });
+  const map = new Map({ container, ...defaults, ...rest });
   useMapEvents(map, rest);
   await map.once('load');
 
