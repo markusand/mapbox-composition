@@ -40,7 +40,7 @@ export default (map: Map) => {
   const removeImages = (images: string | string[]): void => {
     const names = Array.isArray(images) ? images : Object.keys(images);
     names.forEach(name => {
-      map.removeImage(name);
+      if (map.hasImage(name)) map.removeImage(name);
       delete persistImages[name];
     });
     if (!Object.keys(persistImages).length) map.off('style.load', persistListener);
