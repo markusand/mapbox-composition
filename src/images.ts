@@ -4,7 +4,7 @@ type ImageOptions = { pixelRatio?: number; sdf?: boolean };
 
 export default (map: Map) => {
   let persistImages: Record<string, string> = {};
-  let persistListener: ((ev: unknown) => void);
+  let persistListener: ((ev: unknown) => void) | undefined;
 
   const loadImage = ([name, path]: string[], options?: ImageOptions): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -43,7 +43,10 @@ export default (map: Map) => {
       if (map.hasImage(name)) map.removeImage(name);
       delete persistImages[name];
     });
-    if (!Object.keys(persistImages).length) map.off('style.load', persistListener);
+    if (!Object.keys(persistImages).length && persistListener) {
+      map.off('style.load', persistListener);
+      persistListener = undefined;
+    }
   };
 
   return { addImages, removeImages };
