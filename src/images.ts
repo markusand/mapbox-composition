@@ -15,9 +15,9 @@ export default (map: Map) => {
 
   const addImages = async (
     images: Record<string, string>,
-    options: { persist?: boolean },
+    options?: { persist?: boolean },
   ): Promise<void> => {
-    const { persist = true } = options;
+    const { persist = true } = options || {};
     if (persist) {
       persistImages = { ...persistImages, ...images };
       if (!persistListener) {
