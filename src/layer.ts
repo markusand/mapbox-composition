@@ -11,7 +11,7 @@ import type {
 import { useSourceEvents, useLayerEvents } from './events';
 import { isObject } from './utils';
 
-type LayerOptions = {
+export type LayerOptions = {
   name: string;
   visible?: boolean;
   under?: string;

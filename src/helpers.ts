@@ -1,5 +1,4 @@
-import { LngLatBounds } from 'mapbox-gl';
-import type { LngLatLike } from 'mapbox-gl';
+import { LngLatBounds, LngLatLike } from 'mapbox-gl';
 import type { FeatureCollection, Feature, Geometry, Position } from 'geojson';
 
 type GeometryType = Exclude<Geometry['type'], 'GeometryCollection'>;

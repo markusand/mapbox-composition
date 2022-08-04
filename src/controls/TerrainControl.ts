@@ -1,8 +1,6 @@
-import { IControl } from 'mapbox-gl';
-import type { Map } from 'mapbox-gl';
-import useTerrain from '../terrain';
+import type { Map, IControl } from 'mapbox-gl';
+import useTerrain, { TerrainExtrusion, TerrainOptions } from '../terrain';
 import type { ControlOptions } from '.';
-import type { TerrainExtrusion, TerrainOptions } from '../terrain';
 
 export type TerrainControlOptions = {
   extrudeOnInit?: boolean,

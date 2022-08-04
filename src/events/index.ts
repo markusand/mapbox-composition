@@ -1,7 +1,5 @@
-import useMapEvents from './events.map';
-import useSourceEvents from './events.source';
-import useLayerEvents from './events.layer';
-import useMarkerEvents from './events.marker';
-import usePopupEvents from './events.popup';
-
-export { useMapEvents, useSourceEvents, useLayerEvents, useMarkerEvents, usePopupEvents };
+export { default as useMapEvents } from './events.map';
+export { default as useSourceEvents } from './events.source';
+export { default as useLayerEvents } from './events.layer';
+export { default as useMarkerEvents } from './events.marker';
+export { default as usePopupEvents } from './events.popup';

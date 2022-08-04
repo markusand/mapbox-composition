@@ -1,11 +1,11 @@
 import { NavigationControl, ScaleControl, GeolocateControl, AttributionControl, FullscreenControl } from 'mapbox-gl';
 import type { Map, IControl } from 'mapbox-gl';
-import StylesControl from './StylesControl';
-import TerrainControl from './TerrainControl';
-import type { TerrainControlOptions } from './TerrainControl';
-import type { StylesControlOptions } from './StylesControl';
+import StylesControl, { StylesControlOptions } from './StylesControl';
+import TerrainControl, { TerrainControlOptions } from './TerrainControl';
 
-type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+export type { StylesControlOptions, TerrainControlOptions };
+
+export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
 export type ControlName = 'navigation' | 'scale' | 'geolocate' | 'attribution' | 'fullscreen' | 'styles' | 'terrain';
 

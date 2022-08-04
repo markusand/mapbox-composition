@@ -1,5 +1,4 @@
-import { Popup as MPopup } from 'mapbox-gl';
-import type { Map, LngLatLike, PopupOptions as MPopupOptions, MapboxEvent } from 'mapbox-gl';
+import { Map, LngLatLike, Popup as MPopup, PopupOptions as MPopupOptions, MapboxEvent } from 'mapbox-gl';
 import { usePopupEvents } from './events';
 import { uuid } from './utils';
 

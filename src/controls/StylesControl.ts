@@ -1,5 +1,4 @@
-import { IControl } from 'mapbox-gl';
-import type { Map } from 'mapbox-gl';
+import type { Map, IControl } from 'mapbox-gl';
 import type { ControlOptions } from '.';
 
 type Style = {

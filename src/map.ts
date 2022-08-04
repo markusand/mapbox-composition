@@ -1,14 +1,17 @@
-import { Map } from 'mapbox-gl';
-import type { MapboxOptions } from 'mapbox-gl';
+import { Map, MapboxOptions } from 'mapbox-gl';
 import type { MapEventHandlers } from './events/events.map';
 import { useMapEvents } from './events';
-import useControls, { ControlName, ControlOptions } from './controls';
-import type { TerrainControlOptions } from './controls/TerrainControl';
-import type { StylesControlOptions } from './controls/StylesControl';
+import useControls, {
+  ControlName,
+  ControlOptions,
+  TerrainControlOptions,
+  StylesControlOptions,
+} from './controls';
 import { debounce, capitalize } from './utils';
 
 type Controls = Record<ControlName, ControlOptions | TerrainControlOptions | StylesControlOptions>;
-type MapOptions = {
+
+export type MapOptions = {
   debounceTime?: number;
   controls?: Partial<Controls>;
 } & Omit<MapboxOptions, 'container'>
