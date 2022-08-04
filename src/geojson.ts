@@ -8,18 +8,21 @@ export type GeoJSONLayerOptions = {
 
 export default (map: Map, options: GeoJSONLayerOptions) => {
   // Adapt to GeoJSON source format
-  const geoJSON = useLayer(map, {
+  const geojson = { data: options.source };
+  const layer = useLayer(map, {
     ...options,
     type: 'geojson',
-    source: { data: options.source } as GeoJSONSourceRaw,
+    source: geojson as GeoJSONSourceRaw,
+    // source: { data: options.source } as GeoJSONSourceRaw,
   });
 
   // Override. GeoJSON can be updated by setting new data
   const updateSource = (data: GeoJSONLayerOptions['source']) => {
     const source = map.getSource(options.name) as GeoJSONSource;
     if (source) source.setData(data);
-    else geoJSON.updateSource({ data } as GeoJSONSourceRaw);
+    else layer.updateSource({ data } as GeoJSONSourceRaw);
+    geojson.data = data;
   };
 
-  return { ...geoJSON, updateSource };
+  return { ...layer, updateSource };
 };

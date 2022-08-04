@@ -94,8 +94,8 @@ export default (map: Map, options: BaseLayerOptions) => {
 
   const hasLayer = (id: string) => !!LAYERS[id] && !!map.getLayer(id);
 
-  // Source handler is overriden every time to maintain the last available source
-  let persistSourceHandler: EventedListener;
+  /* eslint-disable-next-line @typescript-eslint/no-use-before-define */
+  const persistSourceHandler = () => setSource(options.source);
 
   const clearSource = () => {
     const { name } = options;
@@ -111,10 +111,8 @@ export default (map: Map, options: BaseLayerOptions) => {
     const content = typeof source === 'string' ? { [key]: source } : source;
     map.addSource(name, { ...content, type } as AnySourceData);
     bindSourceEvents();
-    if (persist) {
-      persistSourceHandler = () => setSource(source);
-      map.once('style.load', persistSourceHandler);
-    }
+    options.source = source;
+    if (persist) map.once('style.load', persistSourceHandler);
   };
 
   const updateSource = (source: AnySourceData | string, layers = options.layers) => {
