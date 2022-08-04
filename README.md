@@ -21,35 +21,35 @@ import { useMap, useControls, useGeoJSON, useMarker, usePopup } from 'mapbox-com
 const { MAPBOX_TOKEN } = process.env;
 
 export default {
-    name: 'Map',
-    setup() {
-        onMounted(async () => {
-            const map = await useMap('map', {
-                accessToken: MAPBOX_TOKEN,
-                style: 'mapbox://styles/mapbox/light-v9',
-                center: [-122.447303, 37.753574],
-                zoom: 12,
-            });
+  name: 'Map',
+  setup() {
+    onMounted(async () => {
+      const map = await useMap('map', {
+        accessToken: MAPBOX_TOKEN,
+        style: 'mapbox://styles/mapbox/light-v9',
+        center: [-122.447303, 37.753574],
+        zoom: 12,
+      });
 
-            const { addNavigation } = useControls(map);
-            addNavigation({ position: 'top-left' });
+      const { addNavigation } = useControls(map);
+      addNavigation({ position: 'top-left' });
 
-            useGeoJSON(map, {
-                name: 'facilities',
-                source: 'https://data.sfgov.org/resource/nc68-ngbr.geojson',
-                layers: [
-                    { name: 'markers', type: 'circle', paint: { 'circle-color': '#39f' } },
-                    { name: 'labels', type: 'symbol', layout: { 'text-field': 'common-name' } },
-                ],
-            });
+      useGeoJSON(map, {
+        name: 'facilities',
+        source: 'https://data.sfgov.org/resource/nc68-ngbr.geojson',
+        layers: [
+          { name: 'markers', type: 'circle', paint: { 'circle-color': '#39f' } },
+          { name: 'labels', type: 'symbol', layout: { 'text-field': 'common-name' } },
+        ],
+      });
 
-            useMarker(map, {
-                coordinates: [-122.426498, 37.772496],
-                popup: usePopup({ content: 'Painted Ladies' }),
-            });
-        });
+      useMarker(map, {
+        coordinates: [-122.426498, 37.772496],
+        popup: usePopup({ content: 'Painted Ladies' }),
+      });
+    });
 
-        return {};
+    return {};
   },
 };
 ```
@@ -62,20 +62,20 @@ Load is asynchronous, and the function returns a promise that resolves to the Ma
 
 ```javascript
 onMounted(async () => {
-    const map = await useMap('map', { /* Options */ });
+  const map = await useMap('map', { /* Options */ });
 });
 ```
 
-Options object accepts all Mapbox [Map parameters](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters).
+Options object accepts all Mapbox [Map parameters](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters). Can also include a `controls` attrtbiute with options to automatically initialize controls at map load.
 
 Handlers for any [map event](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-events) can be added using the event name prefixed with `on`, such as follows
 
 ```javascript
 useMap('map', {
-    // Many options...
-    onZoomEnd: () => console.log('Zoomed'),
-    onFlyToEnd: () => console.log('Fly finished!'),
-    onDragEnd: () => console.log('Dragged'),
+  // Many options...
+  onZoomEnd: () => console.log('Zoomed'),
+  onFlyToEnd: () => console.log('Fly finished!'),
+  onDragEnd: () => console.log('Dragged'),
 })
 ```
 
@@ -121,20 +121,20 @@ A custom `addStyles` control is available to switch between map styles. Switch b
 ```javascript
 const { addStyles } = useControls(map);
 addStyles({
-    styles: [
-        {
-          name: 'Mapbox Light',
-          url: 'mapbox://styles/mapbox/light-v10',
-          label: 'Light',
-          // img: '/images/map/thumb.contours.jpg',
-        },
-        {
-          name: 'Mapbox Satellite',
-          url: 'mapbox://styles/mapbox/satellite-v9',
-          label: 'Satellite',
-          // img: '/images/map/thumb.satellite.jpg',
-        },
-    ]
+  styles: [
+    {
+      name: 'Mapbox Light',
+      url: 'mapbox://styles/mapbox/light-v10',
+      label: 'Light',
+      // img: '/images/map/thumb.contours.jpg',
+    },
+    {
+      name: 'Mapbox Satellite',
+      url: 'mapbox://styles/mapbox/satellite-v9',
+      label: 'Satellite',
+      // img: '/images/map/thumb.satellite.jpg',
+    },
+  ]
 })
 ```
 
@@ -143,10 +143,10 @@ A custom `addTerrain` control is available to seamlessly toggle 3D map extrusion
 ```javascript
 const { addTerrain } = useControls(map);
 addTerrain({
-    sky: { /* sky options */ },
-    exaggeration: 1.5,
-    pitch: 40,
-    extrudeOnInit: true,
+  sky: { /* sky options */ },
+  exaggeration: 1.5,
+  pitch: 40,
+  extrudeOnInit: true,
 });
 ```
 
@@ -173,16 +173,16 @@ Options object may include event handlers for source events `onError`, `onLoadSt
 
 ```javascript
 const layers = useLayer(map, {
-    name: 'gkhj45665',
-    source: {
-        type: 'vector',
-        url: 'http://api.example.com/tilejson.json',
-    },
-    layers: [
-        { /* Layer options */ },
-        { /* Other layer options */ },
-    ],
-    onClick: ({ features }) => console.log(features),
+  name: 'gkhj45665',
+  source: {
+    type: 'vector',
+    url: 'http://api.example.com/tilejson.json',
+  },
+  layers: [
+    { /* Layer options */ },
+    { /* Other layer options */ },
+  ],
+  onClick: ({ features }) => console.log(features),
 });
 ```
 
@@ -208,9 +208,9 @@ const pulseMarker = document.createElement('div');
 pulseMarker.classList.add('pulse-marker');
 
 const marker = useMarker(map, {
-    element: pulseMarker,
-    coordinates: [-122.447303, 37.753574],
-    onDragEnd: () => console.log('Marker dragged');
+  element: pulseMarker,
+  coordinates: [-122.447303, 37.753574],
+  onDragEnd: () => console.log('Marker dragged');
 });
 ```
 
@@ -224,11 +224,11 @@ Use `coordinates` to assign the location of the popup. Popup accepts HTML conten
 
 ```javascript
 const popup = usePopup(map, {
-    name: 'my-popup',
-    coordinates: [-122.447303, 37.753574],
-    content: '<h1>I am a popup</h1>',
-    closeOnClick: false,
-    onClose: () => console.log('Popup closed'),
+  name: 'my-popup',
+  coordinates: [-122.447303, 37.753574],
+  content: '<h1>I am a popup</h1>',
+  closeOnClick: false,
+  onClose: () => console.log('Popup closed'),
 });
 ```
 
@@ -238,7 +238,7 @@ If no `content` is provided, a container div is created with the `name` id (must
 
 ```html
 <teleport v-if="showPopup" to="#my-popup">
-    <!-- Complex HTML layout -->
+  <!-- Complex HTML layout -->
 </teleport>
 ```
 
@@ -247,8 +247,8 @@ The `map` attribute is not required when binding popup to a marker, as well as t
 ```javascript
 // Add popup on marker creation as a parameter
 const marker = useMarker(map, {
-    ...OPTIONS,
-    popup: usePopup({ content: 'A popup for this marker' }),
+  ...OPTIONS,
+  popup: usePopup({ content: 'A popup for this marker' }),
 })
 
 // Or add popup dynamically
@@ -262,15 +262,15 @@ Load images to be used as icons on the map.
 
 Returns `addImages(images, options)` and `removeImages(images)`. Images are added asynchronously and are not displayed on the map until they are loaded.
 
-Options object accepts `persist` attribute (defaults to true) to reload images after map style changes.
+Options object accepts `persist` attribute (defaults to true) to reload images after map style changes. Also accepts `sdf` and `pixelRatio` [image parameters](https://docs.mapbox.com/mapbox-gl-js/api/map/#addimage-parameters).
 
 ```javascript
 const images = {
-    'my-icon': 'https://example.com/my-icon.png',
-    'my-other': 'https://example.com/my-other.png',
+  'my-icon': 'https://example.com/my-icon.png',
+  'my-other': 'https://example.com/my-other.png',
 };
 const { addImages, removeImages } = useImages(map);
-await addImages(images);
+await addImages(images, { sdf: true });
 
 removeImages(images);
 // or removeImages(['my-icon', 'my-other']);
