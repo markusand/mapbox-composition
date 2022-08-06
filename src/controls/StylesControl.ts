@@ -58,7 +58,7 @@ export default class StylesControl implements IControl {
         thumbnail.src = style.img;
         button.appendChild(thumbnail);
       } else {
-        const label = document.createElement('span');
+        const label = document.createElement('em');
         label.textContent = style.label || `Style ${i}`;
         button.appendChild(label);
       }
