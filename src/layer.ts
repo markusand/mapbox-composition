@@ -135,5 +135,6 @@ export default (map: Map, options: BaseLayerOptions) => {
     isVisible,
     setVisibility,
     setFilters,
+    type: options.type,
   };
 };
