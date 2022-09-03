@@ -11,6 +11,24 @@ import type {
 import { useSourceEvents, useLayerEvents } from './events';
 import { isObject } from './utils';
 
+type TilesJSONSource = {
+  tilejson: `${number}.${number}.${number}`;
+  name?: string | null;
+  description?: string | null;
+  version?: `${number}.${number}.${number}`;
+  attribution?: string | null;
+  template?: string | null;
+  legend?: string | null;
+  scheme?: 'xyz' | 'tms';
+  tiles: string[];
+  grids?: string[];
+  data?: string[];
+  minzoom?: number;
+  maxzoom?: number;
+  bounds?: [number, number, number, number];
+  center?: [number, number, number];
+};
+
 export type LayerOptions = {
   name: string;
   visible?: boolean;
@@ -21,7 +39,7 @@ export type LayerOptions = {
 export type BaseLayerOptions = {
   name: string;
   type: Source['type'];
-  source: AnySourceData | string;
+  source: AnySourceData | TilesJSONSource | string;
   layers: LayerOptions[];
   persist?: boolean;
   under?: string;
@@ -105,7 +123,7 @@ export default (map: Map, options: BaseLayerOptions) => {
     map.off('style.load', persistSourceHandler);
   };
 
-  const setSource = (source: AnySourceData | string) => {
+  const setSource = (source: BaseLayerOptions['source']) => {
     const { name, type, persist = true } = options;
     const key = type === 'geojson' ? 'data' : 'url';
     const content = typeof source === 'string' ? { [key]: source } : source;
