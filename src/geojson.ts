@@ -13,7 +13,6 @@ export default (map: Map, options: GeoJSONLayerOptions) => {
     ...options,
     type: 'geojson',
     source: geojson as GeoJSONSourceRaw,
-    // source: { data: options.source } as GeoJSONSourceRaw,
   });
 
   // Override. GeoJSON can be updated by setting new data
