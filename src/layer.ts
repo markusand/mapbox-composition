@@ -133,7 +133,7 @@ export default (map: Map, options: BaseLayerOptions) => {
     if (persist) map.once('style.load', persistSourceHandler);
   };
 
-  const updateSource = (source: AnySourceData | string, layers = options.layers) => {
+  const updateSource = (source: AnySourceData | string, layers = Object.values(LAYERS)) => {
     clearSource();
     setSource(source);
     addLayers(layers);
