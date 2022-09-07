@@ -4,7 +4,6 @@ import type {
   AnyLayer,
   Source,
   Layer,
-  EventedListener,
   MapSourceDataEvent,
   MapLayerMouseEvent,
 } from 'mapbox-gl';
@@ -29,6 +28,11 @@ type TilesJSONSource = {
   center?: [number, number, number];
 };
 
+export type LayerError = Error & {
+  status?: number;
+  url?: string;
+};
+
 export type LayerOptions = {
   name: string;
   visible?: boolean;
@@ -43,11 +47,11 @@ export type BaseLayerOptions = {
   layers: LayerOptions[];
   persist?: boolean;
   under?: string;
-  onError?: EventedListener,
-  onLoadStart?: (event: MapSourceDataEvent) => void;
-  onLoadEnd?: (event: MapSourceDataEvent) => void;
-  onClick?: (event: MapLayerMouseEvent) => void;
-  onHover?: (event: MapLayerMouseEvent) => void;
+  onError?: (error: LayerError) => any,
+  onLoadStart?: (event: MapSourceDataEvent) => any;
+  onLoadEnd?: (event: MapSourceDataEvent) => any;
+  onClick?: (event: MapLayerMouseEvent) => any;
+  onHover?: (event: MapLayerMouseEvent) => any;
 };
 
 export default (map: Map, options: BaseLayerOptions) => {
