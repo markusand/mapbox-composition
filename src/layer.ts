@@ -45,6 +45,8 @@ export type BaseLayerOptions = {
   type: Source['type'];
   source: AnySourceData | TilesJSONSource | string;
   layers: LayerOptions[];
+  promoteId?: string | Record<string, string>;
+  generateId?: boolean;
   persist?: boolean;
   under?: string;
   onError?: (error: LayerError) => any,
@@ -128,10 +130,10 @@ export default (map: Map, options: BaseLayerOptions) => {
   };
 
   const setSource = (source: BaseLayerOptions['source']) => {
-    const { name, type, persist = true } = options;
     const key = type === 'geojson' ? 'data' : 'url';
     const content = typeof source === 'string' ? { [key]: source } : source;
-    map.addSource(name, { ...content, type } as AnySourceData);
+    const { name, type, promoteId, generateId, persist = true } = options;
+    map.addSource(name, { ...content, promoteId, generateId, type } as AnySourceData);
     bindSourceEvents();
     options.source = source;
     if (persist) map.once('style.load', persistSourceHandler);
