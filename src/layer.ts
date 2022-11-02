@@ -132,7 +132,7 @@ export default (map: Map, options: BaseLayerOptions) => {
   const setSource = (source: BaseLayerOptions['source']) => {
     const { name, type, promoteId, generateId = false, persist = true } = options;
     const key = type === 'geojson' ? 'data' : type === 'video' ? 'urls' : 'url';
-    const content = typeof source === 'string' || type === 'geojson' ? { [key]: source } : source;
+    const content = typeof source === 'string' ? { [key]: source } : source;
     map.addSource(name, { ...content, promoteId, generateId, type } as AnySourceData);
     bindSourceEvents();
     options.source = source;
