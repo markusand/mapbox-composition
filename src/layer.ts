@@ -130,16 +130,16 @@ export default (map: Map, options: BaseLayerOptions) => {
   };
 
   const setSource = (source: BaseLayerOptions['source']) => {
-    const key = type === 'geojson' ? 'data' : 'url';
-    const content = typeof source === 'string' ? { [key]: source } : source;
     const { name, type, promoteId, generateId, persist = true } = options;
+    const key = type === 'geojson' ? 'data' : type === 'video' ? 'urls' : 'url';
+    const content = typeof source === 'string' || type === 'geojson' ? { [key]: source } : source;
     map.addSource(name, { ...content, promoteId, generateId, type } as AnySourceData);
     bindSourceEvents();
     options.source = source;
     if (persist) map.once('style.load', persistSourceHandler);
   };
 
-  const updateSource = (source: AnySourceData | string, layers = Object.values(LAYERS)) => {
+  const updateSource = (source: BaseLayerOptions['source'], layers = Object.values(LAYERS)) => {
     clearSource();
     setSource(source);
     addLayers(layers);
