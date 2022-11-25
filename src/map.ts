@@ -9,6 +9,8 @@ import useControls, {
 } from './controls';
 import { debounce, capitalize } from './utils';
 
+export type { Map };
+
 type Controls = Record<ControlName, ControlOptions | TerrainControlOptions | StylesControlOptions>;
 
 export type MapOptions = {
