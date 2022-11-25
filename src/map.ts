@@ -31,8 +31,8 @@ export default async (container: string | HTMLElement, options: MapOptions) => {
   await map.once('load');
 
   const observed = container instanceof HTMLElement
-    ? container :
-    document.getElementById(container);
+    ? container
+    : document.getElementById(container);
   const resize = debounce(() => map.resize(), debounceTime);
   new ResizeObserver(resize as ResizeObserverCallback).observe(observed as Element);
 
