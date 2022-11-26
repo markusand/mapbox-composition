@@ -7,14 +7,13 @@ import useControls, {
   TerrainControlOptions,
   StylesControlOptions,
 } from './controls';
-import { debounce, capitalize } from './utils';
+import { capitalize } from './utils';
 
 export type { Map };
 
 type Controls = Record<ControlName, ControlOptions | TerrainControlOptions | StylesControlOptions>;
 
 export type MapOptions = {
-  debounceTime?: number;
   controls?: Partial<Controls>;
 } & Omit<MapboxOptions, 'container'>
 & Partial<MapEventHandlers>;
@@ -26,17 +25,11 @@ const defaults: MapOptions = {
 };
 
 export default async (container: string | HTMLElement, options: MapOptions) => {
-  const { debounceTime = 100, controls, ...rest } = options;
+  const { controls, ...rest } = options;
 
   const map = new Map({ container, ...defaults, ...rest });
-  useMapEvents(map, rest);
   await map.once('load');
-
-  const observed = container instanceof HTMLElement
-    ? container
-    : document.getElementById(container);
-  const resize = debounce(() => map.resize(), debounceTime);
-  new ResizeObserver(resize as ResizeObserverCallback).observe(observed as Element);
+  useMapEvents(map, rest);
 
   if (controls) {
     const controlAdders = useControls(map);
