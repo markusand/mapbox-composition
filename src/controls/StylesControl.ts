@@ -52,7 +52,7 @@ export default class StylesControl implements IControl {
 
     this._buttons = this._styles.map((style, i) => {
       const button = document.createElement('button');
-      button.classList.add(`mapboxgl-ctrl-styles-${style.name}`);
+      button.classList.add(`mapboxgl-ctrl-styles-${style.name.replace(/\W/g, '_').toLowerCase()}`);
       if (style.img) {
         const thumbnail = document.createElement('img');
         thumbnail.src = style.img;
