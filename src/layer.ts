@@ -118,29 +118,26 @@ export default (map: Map, options: BaseLayerOptions) => {
 
   const hasLayer = (id: string) => !!LAYERS[id] && !!map.getLayer(id);
 
-  /* eslint-disable-next-line @typescript-eslint/no-use-before-define */
-  const persistSourceHandler = () => setSource(options.source);
+  let persistSourceHandler: () => void;
 
   const clearSource = () => {
-    const { name } = options;
-    clearLayers();
     unbindSourceEvents();
-    if (map.getSource(name)) map.removeSource(name);
+    if (map.getSource(options.name)) map.removeSource(options.name);
     map.off('style.load', persistSourceHandler);
   };
 
   const setSource = (source: BaseLayerOptions['source']) => {
+    clearSource();
     const { name, type, promoteId, generateId = false, persist = true } = options;
     const key = type === 'geojson' ? 'data' : type === 'video' ? 'urls' : 'url';
     const content = typeof source === 'string' ? { [key]: source } : source;
     map.addSource(name, { ...content, promoteId, generateId, type } as AnySourceData);
     bindSourceEvents();
-    options.source = source;
+    persistSourceHandler = () => setSource(source);
     if (persist) map.once('style.load', persistSourceHandler);
   };
 
   const updateSource = (source: BaseLayerOptions['source'], layers = Object.values(LAYERS)) => {
-    clearSource();
     setSource(source);
     addLayers(layers);
   };

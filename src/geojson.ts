@@ -14,12 +14,10 @@ const isGeo = (item: any): item is Feature<Geometry> | FeatureCollection<Geometr
 const getSource = (source: any) => isString(source) || isGeo(source) ? { data: source } : source;
 
 export default (map: Map, options: GeoJSONLayerOptions) => {
-  const geojson = getSource(options.source);
-
   const layer = useLayer(map, {
     ...options,
     type: 'geojson',
-    source: geojson,
+    source: getSource(options.source),
   });
 
   // Override. GeoJSON can be updated by setting new data
@@ -27,7 +25,6 @@ export default (map: Map, options: GeoJSONLayerOptions) => {
     const source = map.getSource(options.name) as GeoJSONSource;
     if (source) source.setData(data);
     else layer.updateSource({ data } as GeoJSONSourceRaw);
-    geojson.data = data;
   };
 
   return { ...layer, updateSource };
