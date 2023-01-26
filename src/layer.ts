@@ -121,6 +121,7 @@ export default (map: Map, options: BaseLayerOptions) => {
   let persistSourceHandler: () => void;
 
   const clearSource = () => {
+    clearLayers();
     unbindSourceEvents();
     if (map.getSource(options.name)) map.removeSource(options.name);
     map.off('style.load', persistSourceHandler);
