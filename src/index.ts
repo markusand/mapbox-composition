@@ -1,5 +1,6 @@
+export { Map, MapMouseEvent, MapTouchEvent, MapWheelEvent, MapDataEvent, MapBoxZoomEvent } from 'mapbox-gl';
 export { default as useMap } from './map';
-export type { Map, MapOptions } from './map';
+export type { MapOptions } from './map';
 export { default as useControls } from './controls';
 export type {
   ControlName,
