@@ -56,6 +56,9 @@ export type BaseLayerOptions = {
   onHover?: (event: MapLayerMouseEvent) => any;
 };
 
+/* Trust in function hoisting for persistance handlers */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
 export default (map: Map, options: BaseLayerOptions) => {
   const { bindSourceEvents, unbindSourceEvents } = useSourceEvents(map, options.name, options);
   const { bindLayerEvents, unbindLayerEvents } = useLayerEvents(map, options);
@@ -79,7 +82,6 @@ export default (map: Map, options: BaseLayerOptions) => {
     });
   };
 
-  /* eslint-disable-next-line @typescript-eslint/no-use-before-define */ /* Trust in function hoisting */
   const persistLayerHandler = () => addLayers(Object.values(LAYERS));
 
   const clearLayers = (layerIds: string[] = Object.keys(LAYERS)) => {
@@ -134,7 +136,7 @@ export default (map: Map, options: BaseLayerOptions) => {
     const content = typeof source === 'string' ? { [key]: source } : source;
     map.addSource(name, { ...content, promoteId, generateId, type } as AnySourceData);
     bindSourceEvents();
-    persistSourceHandler = () => setSource(source);
+    persistSourceHandler = () => updateSource(source);
     if (persist) map.once('style.load', persistSourceHandler);
   };
 
