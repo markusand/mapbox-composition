@@ -11,7 +11,8 @@ export default (map: Map) => {
       if (map.hasImage(name)) return resolve();
       return map.loadImage(path, (error, image) => {
         if (error) return reject(error);
-        if (image) map.addImage(name, image, options);
+        // Check image again. It may have been loaded meanwhile
+        if (image && !map.hasImage(name)) map.addImage(name, image, options);
         return resolve();
       });
     });
