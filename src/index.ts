@@ -10,7 +10,7 @@ export type {
   TerrainControlOptions,
 } from './controls';
 export { default as useLayer } from './layer';
-export type { LayerOptions, BaseLayerOptions, LayerError } from './layer';
+export type { LayerOptions, BaseLayerOptions, LayerError, TilesJSONSource } from './layer';
 export { default as useGeoJSON } from './geojson';
 export type { GeoJSONLayerOptions } from './geojson';
 export { default as useMarker } from './marker';

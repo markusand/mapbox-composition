@@ -10,7 +10,7 @@ import type {
 import { useSourceEvents, useLayerEvents } from './events';
 import { isObject } from './utils';
 
-type TilesJSONSource = {
+export type TilesJSONSource = {
   tilejson: `${number}.${number}.${number}`;
   name?: string | null;
   description?: string | null;
