@@ -1,11 +1,11 @@
-import { Map, MapboxOptions } from 'mapbox-gl';
+import { Map, type MapboxOptions } from 'mapbox-gl';
 import type { MapEventHandlers } from './events/events.map';
 import { useMapEvents } from './events';
 import useControls, {
-  ControlName,
-  ControlOptions,
-  TerrainControlOptions,
-  StylesControlOptions,
+  type ControlName,
+  type ControlOptions,
+  type TerrainControlOptions,
+  type StylesControlOptions,
 } from './controls';
 import { capitalize } from './utils';
 

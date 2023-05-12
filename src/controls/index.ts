@@ -1,7 +1,7 @@
 import { NavigationControl, ScaleControl, GeolocateControl, AttributionControl, FullscreenControl } from 'mapbox-gl';
 import type { Map, IControl } from 'mapbox-gl';
-import StylesControl, { StylesControlOptions } from './StylesControl';
-import TerrainControl, { TerrainControlOptions } from './TerrainControl';
+import StylesControl, { type StylesControlOptions } from './StylesControl';
+import TerrainControl, { type TerrainControlOptions } from './TerrainControl';
 
 export type { StylesControlOptions, TerrainControlOptions };
 

@@ -1,4 +1,4 @@
-export { Map, MapMouseEvent, MapTouchEvent, MapWheelEvent, MapDataEvent, MapBoxZoomEvent } from 'mapbox-gl';
+export { Map, MapMouseEvent, MapTouchEvent, MapWheelEvent, type MapDataEvent, type MapBoxZoomEvent } from 'mapbox-gl';
 export { default as useMap } from './map';
 export type { MapOptions } from './map';
 export { default as useControls } from './controls';
@@ -18,7 +18,7 @@ export type { MarkerOptions } from './marker';
 export { default as usePopup } from './popup';
 export type { PopupOptions } from './popup';
 export { default as useTerrain } from './terrain';
-export { TerrainExtrusion, TerrainOptions } from './terrain';
+export type { TerrainExtrusion, TerrainOptions } from './terrain';
 export { default as useAsync } from './async';
 export { default as useImages } from './images';
 export { default as helpers } from './helpers';

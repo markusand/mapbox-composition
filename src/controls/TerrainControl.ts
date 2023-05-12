@@ -1,5 +1,5 @@
 import type { Map, IControl } from 'mapbox-gl';
-import useTerrain, { TerrainExtrusion, TerrainOptions } from '../terrain';
+import useTerrain, { type TerrainExtrusion, type TerrainOptions } from '../terrain';
 import type { ControlOptions } from '.';
 
 export type TerrainControlOptions = {

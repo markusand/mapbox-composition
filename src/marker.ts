@@ -1,4 +1,4 @@
-import { Map, LngLatLike, Marker, MarkerOptions as MMarkerOptions, MapboxEvent } from 'mapbox-gl';
+import { Map, type LngLatLike, Marker, type MarkerOptions as MMarkerOptions, type MapboxEvent } from 'mapbox-gl';
 import { useMarkerEvents } from './events';
 import type Popup from './popup';
 
