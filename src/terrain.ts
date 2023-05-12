@@ -30,8 +30,10 @@ const defaults: { TERRAIN: TerrainOptions, SKY: SkyPaint, FOG: Fog } = {
 
 export default (map: Map, options: TerrainOptions) => {
   const { sky = defaults.SKY, fog = defaults.FOG, ...terrain } = options;
+  let extruded = false;
 
   const extrude = ({ exaggeration = 1.5, pitch = 45 }: TerrainExtrusion) => {
+    extruded = true;
     map.addSource('mapboxgl-dem', { type: 'raster-dem', ...defaults.TERRAIN, ...terrain });
     map.setTerrain({ source: 'mapboxgl-dem', exaggeration });
     map.easeTo({ pitch });
@@ -42,6 +44,7 @@ export default (map: Map, options: TerrainOptions) => {
   };
 
   const flatten = () => {
+    extruded = false;
     map.setTerrain();
     map.setFog(null!); // setFog accepts null to remove fog
     map.easeTo({ pitch: 0 });
@@ -49,7 +52,7 @@ export default (map: Map, options: TerrainOptions) => {
     if (map.getLayer('mapboxgl-sky')) map.removeLayer('mapboxgl-sky');
   };
 
-  const isExtruded = () => !!map.getTerrain();
+  const isExtruded = () => extruded;
 
   return { extrude, flatten, isExtruded };
 };
