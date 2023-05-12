@@ -82,15 +82,12 @@ export default (map: Map, options: BaseLayerOptions) => {
     });
   };
 
-  const persistLayerHandler = () => addLayers(Object.values(LAYERS));
-
   const clearLayers = (layerIds: string[] = Object.keys(LAYERS)) => {
     layerIds.forEach(id => {
       unbindLayerEvents(id);
       if (map.getLayer(id)) map.removeLayer(id);
       if (id in LAYERS) delete LAYERS[id];
     });
-    map.off('style.load', persistLayerHandler);
   };
 
   const updateLayers = (layers: LayerOptions[] = []) => {
@@ -106,7 +103,7 @@ export default (map: Map, options: BaseLayerOptions) => {
   };
 
   const addLayers = (layers: LayerOptions[]) => {
-    const { name: sourceName, persist = true, under: globalUnder } = options;
+    const { name: sourceName, under: globalUnder } = options;
     layers.forEach(({ name, under = globalUnder, visible = true, ...params }, i) => {
       const id = name || `${sourceName}--${i}`;
       LAYERS[id] = { name, under, visible, ...params };
@@ -115,7 +112,6 @@ export default (map: Map, options: BaseLayerOptions) => {
       setVisibility(visible, [id]);
       bindLayerEvents(id);
     });
-    if (persist) map.once('style.load', persistLayerHandler);
   };
 
   const hasLayer = (id: string) => !!LAYERS[id] && !!map.getLayer(id);
