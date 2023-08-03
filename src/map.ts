@@ -18,11 +18,12 @@ export type MapOptions = {
 
 
 export default async (container: string | HTMLElement, options: MapOptions) => {
-  const { controls, ...rest } = options;
+  const { controls, ...mapOptions } = options;
 
-  const map = new Map({ container, ...rest });
+  const map = new Map({ container, ...mapOptions });
   await map.once('load');
-  useMapEvents(map, rest);
+
+  useMapEvents(map, mapOptions);
 
   if (controls) {
     const controlAdders = useControls(map);
