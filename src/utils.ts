@@ -7,3 +7,11 @@ export const isObject = (item: unknown): boolean => (
 );
 
 export const toArray = <T>(item: T): T[] => (Array.isArray(item) ? item : [item]);
+
+export const debounce = <T extends any[]>(callback: (...args: T) => void, delay: number) => {
+  let timeout: ReturnType<typeof setTimeout>;
+  return (...args: T) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => callback(...args), delay);
+  };
+};
