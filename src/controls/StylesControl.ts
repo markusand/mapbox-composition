@@ -1,7 +1,6 @@
 import type { Map, IControl } from 'mapbox-gl';
-import type { ControlOptions } from '.';
 
-type Style = {
+export type StylesControlStyle = {
   name: string;
   url: string;
   label?: string;
@@ -9,14 +8,14 @@ type Style = {
 };
 
 export type StylesControlOptions = {
-  styles?: Style[];
-} & ControlOptions;
+  styles?: StylesControlStyle[];
+};
 
-const defaults: Style[] = [
+const defaults: StylesControlStyle[] = [
   {
-    name: 'Mapbox Light',
-    url: 'mapbox://styles/mapbox/light-v10',
-    label: 'Light',
+    name: 'Mapbox Street',
+    url: 'mapbox://styles/mapbox/streets-v12',
+    label: 'Street',
   },
   {
     name: 'Mapbox Satellite',
@@ -26,7 +25,7 @@ const defaults: Style[] = [
 ];
 
 export default class StylesControl implements IControl {
-  _styles: Style[];
+  _styles: StylesControlStyle[];
 
   _active: string | undefined;
 

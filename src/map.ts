@@ -1,17 +1,10 @@
 import { Map, type MapboxOptions } from 'mapbox-gl';
 import { useMapEvents, type MapEventHandlers } from './events';
-import useControls, {
-  type ControlName,
-  type ControlOptions,
-  type TerrainControlOptions,
-  type StylesControlOptions,
-} from './controls';
+import useControls, { type ControlsOptions } from './controls';
 import { capitalize, debounce } from './utils';
 
-type Controls = Record<ControlName, ControlOptions | TerrainControlOptions | StylesControlOptions>;
-
 export type MapOptions = {
-  controls?: Partial<Controls>;
+  controls?: Partial<ControlsOptions>;
   debounce?: number;
 } & Omit<MapboxOptions, 'container'> & Partial<MapEventHandlers>;
 
@@ -34,10 +27,10 @@ export const createMap = async (container: string | HTMLElement, options: MapOpt
   useMapResizer(map, container, options.debounce);
 
   if (controls) {
-    const controlAdders = useControls(map);
+    const adders = useControls(map);
     Object.entries(controls).forEach(([name, params]) => {
-      const adder = `add${capitalize(name)}` as `add${Capitalize<ControlName>}`;
-      controlAdders[adder]?.(params);
+      const adder = `add${capitalize(name)}` as `add${Capitalize<keyof ControlsOptions>}`;
+      adders[adder]?.(params);
     });
   }
 
