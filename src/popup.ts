@@ -1,19 +1,17 @@
-import { Map, type LngLatLike, Popup as MPopup, type PopupOptions as MPopupOptions, MapboxEvent } from 'mapbox-gl';
-import { usePopupEvents } from './events';
+import { Map, type LngLatLike, Popup as MPopup, type PopupOptions as MPopupOptions } from 'mapbox-gl';
+import { usePopupEvents, type PopupEventHandlers } from './events';
 import { uuid } from './utils';
 
 export type PopupOptions = {
   name?: string;
   coordinates?: LngLatLike;
   content?: string;
-  onOpen?: (event: MapboxEvent) => void;
-  onClose?: (event: MapboxEvent) => void;
-} & MPopupOptions;
+} & MPopupOptions & PopupEventHandlers;
 
 export default (...args: [Map, PopupOptions] | [PopupOptions]) => {
   const [map, options] = args.length === 1 ? [, args[0]] : args;
   const { content, coordinates, name = `popup-${uuid()}`, ...rest } = options;
-  const { bindPopupEvents } = usePopupEvents(options);
+  const events = usePopupEvents(options);
 
   const popup = new MPopup(rest);
 
@@ -25,7 +23,7 @@ export default (...args: [Map, PopupOptions] | [PopupOptions]) => {
   // Instantiate
   if (coordinates) setLocation(coordinates);
   setContent(content || `<div id="${name}"></div>`);
-  bindPopupEvents(popup);
+  events.bind(popup);
 
   return {
     get popup() { return popup; },
