@@ -20,7 +20,11 @@ const useMapResizer = (map: Map, el: string | HTMLElement, debounceTime?: number
 export const createMap = async (container: string | HTMLElement, options: MapOptions) => {
   const { controls, ...mapOptions } = options;
 
-  const map = new Map({ container, ...mapOptions });
+  const map = new Map({
+    container,
+    style: 'mapbox://styles/mapbox/streets-v12',
+    ...mapOptions,
+  });
   await map.once('load');
 
   useMapEvents(map, mapOptions);
