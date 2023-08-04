@@ -13,8 +13,7 @@ type Controls = Record<ControlName, ControlOptions | TerrainControlOptions | Sty
 export type MapOptions = {
   controls?: Partial<Controls>;
   debounce?: number;
-} & Omit<MapboxOptions, 'container'>
-& Partial<MapEventHandlers>;
+} & Omit<MapboxOptions, 'container'> & Partial<MapEventHandlers>;
 
 const useMapResizer = (map: Map, el: string | HTMLElement, debounceTime?: number) => {
   const observer = new ResizeObserver(debounce(([entry]) => {
@@ -25,7 +24,7 @@ const useMapResizer = (map: Map, el: string | HTMLElement, debounceTime?: number
   if (observed) observer.observe(observed);
 };
 
-export default async (container: string | HTMLElement, options: MapOptions) => {
+export const createMap = async (container: string | HTMLElement, options: MapOptions) => {
   const { controls, ...mapOptions } = options;
 
   const map = new Map({ container, ...mapOptions });
