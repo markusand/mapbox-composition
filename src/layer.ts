@@ -5,9 +5,8 @@ import type {
   Source,
   Layer,
   MapSourceDataEvent,
-  MapLayerMouseEvent,
 } from 'mapbox-gl';
-import { useSourceEvents, useLayerEvents } from './events';
+import { useSourceEvents, useLayerEvents, type LayerEventHandlers } from './events';
 import { isObject } from './utils';
 
 export type TilesJSONSource = {
@@ -52,16 +51,14 @@ export type BaseLayerOptions = {
   onError?: (error: LayerError) => any,
   onLoadStart?: (event: MapSourceDataEvent) => any;
   onLoadEnd?: (event: MapSourceDataEvent) => any;
-  onClick?: (event: MapLayerMouseEvent) => any;
-  onHover?: (event: MapLayerMouseEvent) => any;
-};
+} & LayerEventHandlers;
 
 /* Trust in function hoisting for persistance handlers */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 export default (map: Map, options: BaseLayerOptions) => {
   const { bindSourceEvents, unbindSourceEvents } = useSourceEvents(map, options.name, options);
-  const { bindLayerEvents, unbindLayerEvents } = useLayerEvents(map, options);
+  const events = useLayerEvents(map, options);
   const LAYERS: Record<string, LayerOptions> = {};
 
   const setVisibility = (isVisible: boolean, layerIds = Object.keys(LAYERS)) => {
@@ -84,7 +81,7 @@ export default (map: Map, options: BaseLayerOptions) => {
 
   const clearLayers = (layerIds: string[] = Object.keys(LAYERS)) => {
     layerIds.forEach(id => {
-      unbindLayerEvents(id);
+      events.unbind(id);
       if (map.getLayer(id)) map.removeLayer(id);
       if (id in LAYERS) delete LAYERS[id];
     });
@@ -110,7 +107,7 @@ export default (map: Map, options: BaseLayerOptions) => {
       const zPosition = under && map.getLayer(under) ? under : undefined;
       map.addLayer({ ...params, source: sourceName, id } as AnyLayer, zPosition);
       setVisibility(visible, [id]);
-      bindLayerEvents(id);
+      events.bind(id);
     });
   };
 

@@ -1,25 +1,22 @@
 import type { Map, MapLayerMouseEvent } from 'mapbox-gl';
-import type { BaseLayerOptions } from '../layer';
 
-export const useLayerEvents = (map: Map, { onClick, onHover }: BaseLayerOptions) => {
-  const layerClickHandler = (event: MapLayerMouseEvent) => onClick?.(event);
-  const layerHoverHandler = (event: MapLayerMouseEvent) => onHover?.(event);
+export type { MapLayerMouseEvent };
 
-  const bindLayerEvents = (layerId: string) => {
-    if (onClick) map.on('click', layerId, layerClickHandler);
-    if (onHover) {
-      map.on('mouseenter', layerId, layerHoverHandler);
-      map.on('mousemove', layerId, layerHoverHandler);
-      map.on('mouseleave', layerId, layerHoverHandler);
-    }
+export type LayerEventHandlers = {
+  onClick?: (event: MapLayerMouseEvent) => void;
+  onHover?: (event: MapLayerMouseEvent) => void;
+};
+
+export const useLayerEvents = (map: Map, { onClick, onHover }: LayerEventHandlers) => {
+  const bind = (layerId: string) => {
+    if (onClick) map.on('click', layerId, onClick);
+    if (onHover) map.on('mousemove', layerId, onHover);
   };
 
-  const unbindLayerEvents = (layerId: string) => {
-    map.off('click', layerId, layerClickHandler);
-    map.off('mouseenter', layerId, layerHoverHandler);
-    map.off('mousemove', layerId, layerHoverHandler);
-    map.off('mouseleave', layerId, layerHoverHandler);
+  const unbind = (layerId: string) => {
+    if (onClick) map.off('click', layerId, onClick);
+    if (onHover) map.off('mouseenter', layerId, onHover);
   };
 
-  return { bindLayerEvents, unbindLayerEvents };
+  return { bind, unbind };
 };
