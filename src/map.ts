@@ -12,7 +12,7 @@ const useMapResizer = (map: Map, el: string | HTMLElement, debounceTime?: number
   const observer = new ResizeObserver(debounce(([entry]) => {
     if (entry.target.classList.contains('mapboxgl-map')) map.resize();
     else observer.disconnect();
-  }, debounceTime || 200));
+  }, debounceTime || 13));
   const observed = typeof el === 'string' ? document.getElementById(el) : el;
   if (observed) observer.observe(observed);
 };
