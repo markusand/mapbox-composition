@@ -4,9 +4,8 @@ import type {
   AnyLayer,
   Source,
   Layer,
-  MapSourceDataEvent,
 } from 'mapbox-gl';
-import { useSourceEvents, useLayerEvents, type LayerEventHandlers } from './events';
+import { useSourceEvents, useLayerEvents, type SourceEventHandlers, type LayerEventHandlers } from './events';
 import { isObject } from './utils';
 
 export type TilesJSONSource = {
@@ -27,11 +26,6 @@ export type TilesJSONSource = {
   center?: [number, number, number];
 };
 
-export type LayerError = Error & {
-  status?: number;
-  url?: string;
-};
-
 export type LayerOptions = {
   name: string;
   visible?: boolean;
@@ -48,17 +42,14 @@ export type BaseLayerOptions = {
   generateId?: boolean;
   persist?: boolean;
   under?: string;
-  onError?: (error: LayerError) => any,
-  onLoadStart?: (event: MapSourceDataEvent) => any;
-  onLoadEnd?: (event: MapSourceDataEvent) => any;
-} & LayerEventHandlers;
+} & SourceEventHandlers & LayerEventHandlers;
 
 /* Trust in function hoisting for persistance handlers */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 export default (map: Map, options: BaseLayerOptions) => {
-  const { bindSourceEvents, unbindSourceEvents } = useSourceEvents(map, options.name, options);
-  const events = useLayerEvents(map, options);
+  const sourceEvents = useSourceEvents(map, options.name, options);
+  const layerEvents = useLayerEvents(map, options);
   const LAYERS: Record<string, LayerOptions> = {};
 
   const setVisibility = (isVisible: boolean, layerIds = Object.keys(LAYERS)) => {
@@ -81,7 +72,7 @@ export default (map: Map, options: BaseLayerOptions) => {
 
   const clearLayers = (layerIds: string[] = Object.keys(LAYERS)) => {
     layerIds.forEach(id => {
-      events.unbind(id);
+      layerEvents.unbind(id);
       if (map.getLayer(id)) map.removeLayer(id);
       if (id in LAYERS) delete LAYERS[id];
     });
@@ -107,7 +98,7 @@ export default (map: Map, options: BaseLayerOptions) => {
       const zPosition = under && map.getLayer(under) ? under : undefined;
       map.addLayer({ ...params, source: sourceName, id } as AnyLayer, zPosition);
       setVisibility(visible, [id]);
-      events.bind(id);
+      layerEvents.bind(id);
     });
   };
 
@@ -117,7 +108,7 @@ export default (map: Map, options: BaseLayerOptions) => {
 
   const clearSource = () => {
     clearLayers();
-    unbindSourceEvents();
+    sourceEvents.unbind();
     if (map.getSource(options.name)) map.removeSource(options.name);
     map.off('style.load', persistSourceHandler);
   };
@@ -128,7 +119,7 @@ export default (map: Map, options: BaseLayerOptions) => {
     const key = type === 'geojson' ? 'data' : type === 'video' ? 'urls' : 'url';
     const content = typeof source === 'string' ? { [key]: source } : source;
     map.addSource(name, { ...content, promoteId, generateId, type } as AnySourceData);
-    bindSourceEvents();
+    sourceEvents.bind();
     persistSourceHandler = () => updateSource(source);
     if (persist) map.once('style.load', persistSourceHandler);
   };
