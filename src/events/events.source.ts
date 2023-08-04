@@ -1,7 +1,7 @@
 import type { Map, MapSourceDataEvent } from 'mapbox-gl';
 import type { BaseLayerOptions } from '../layer';
 
-export default (map: Map, sourceId: string, options: BaseLayerOptions) => {
+export const useSourceEvents = (map: Map, sourceId: string, options: BaseLayerOptions) => {
   const { onError, onLoadStart, onLoadEnd } = options;
   let isSourceLoading = false;
 

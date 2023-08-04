@@ -1,7 +1,7 @@
 import type { Map, MapLayerMouseEvent } from 'mapbox-gl';
 import type { BaseLayerOptions } from '../layer';
 
-export default (map: Map, { onClick, onHover }: BaseLayerOptions) => {
+export const useLayerEvents = (map: Map, { onClick, onHover }: BaseLayerOptions) => {
   const layerClickHandler = (event: MapLayerMouseEvent) => onClick?.(event);
   const layerHoverHandler = (event: MapLayerMouseEvent) => onHover?.(event);
 
