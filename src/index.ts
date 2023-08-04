@@ -1,13 +1,6 @@
 export { Map, MapMouseEvent, MapTouchEvent, MapWheelEvent, type MapDataEvent, type MapBoxZoomEvent } from 'mapbox-gl';
 export * from './map';
-export { default as useControls } from './controls';
-export type {
-  ControlName,
-  ControlPosition,
-  ControlOptions,
-  StylesControlOptions,
-  TerrainControlOptions,
-} from './controls';
+export * from './controls';
 export { default as useLayer } from './layer';
 export type { LayerOptions, BaseLayerOptions, LayerError, TilesJSONSource } from './layer';
 export { default as useGeoJSON } from './geojson';

@@ -1,6 +1,6 @@
 import { Map, type MapboxOptions } from 'mapbox-gl';
 import { useMapEvents, type MapEventHandlers } from './events';
-import useControls, { type ControlsOptions } from './controls';
+import { useControls, type ControlsOptions } from './controls';
 import { capitalize, debounce } from './utils';
 
 export type MapOptions = {
