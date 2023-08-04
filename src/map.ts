@@ -1,6 +1,5 @@
 import { Map, type MapboxOptions } from 'mapbox-gl';
-import type { MapEventHandlers } from './events/events.map';
-import { useMapEvents } from './events';
+import { useMapEvents, type MapEventHandlers } from './events';
 import useControls, {
   type ControlName,
   type ControlOptions,
