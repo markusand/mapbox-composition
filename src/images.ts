@@ -8,8 +8,6 @@ type ImageOptions = {
   sdf?: boolean,
 };
 
-const toArray = <T>(item: T | T[]) => Array.isArray(item) ? item : [item];
-
 const cache: Record<string, { image: Image, options?: ImageOptions }> = {};
 
 export default (map: Map) => {
@@ -36,8 +34,8 @@ export default (map: Map) => {
     await Promise.all(loading);
   };
 
-  const removeImages = (names: string | string[]) => {
-    toArray(names).forEach(name => {
+  const removeImages = (names: string[]) => {
+    names.forEach(name => {
       if (map.hasImage(name)) map.removeImage(name);
       delete cache[name];
     });
