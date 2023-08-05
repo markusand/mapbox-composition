@@ -13,7 +13,7 @@ export type StylesControlOptions = {
 
 const defaults: StylesControlStyle[] = [
   {
-    name: 'Mapbox Street',
+    name: 'Mapbox Streets',
     url: 'mapbox://styles/mapbox/streets-v12',
     label: 'Street',
   },
