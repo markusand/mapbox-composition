@@ -28,11 +28,11 @@ const defaults: { TERRAIN: TerrainOptions, SKY: SkyPaint, FOG: Fog } = {
   },
 };
 
-export default (map: Map, options: TerrainOptions) => {
-  const { sky = defaults.SKY, fog = defaults.FOG, ...terrain } = options;
+export const useTerrain = (map: Map, options?: TerrainOptions) => {
+  const { sky = defaults.SKY, fog = defaults.FOG, ...terrain } = options || {};
   let extruded = false;
 
-  const extrude = ({ exaggeration = 1.5, pitch = 45 }: TerrainExtrusion) => {
+  const extrude = ({ exaggeration = 1.5, pitch = 45 }: TerrainExtrusion = {}) => {
     extruded = true;
     map.addSource('mapboxgl-dem', { type: 'raster-dem', ...defaults.TERRAIN, ...terrain });
     map.setTerrain({ source: 'mapboxgl-dem', exaggeration });

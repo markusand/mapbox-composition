@@ -1,5 +1,5 @@
 import type { Map, IControl } from 'mapbox-gl';
-import useTerrain, { type TerrainExtrusion, type TerrainOptions } from '../terrain';
+import { useTerrain, type TerrainExtrusion, type TerrainOptions } from '../terrain';
 
 export type TerrainControlOptions = {
   extrudeOnInit?: boolean,
@@ -18,7 +18,7 @@ export default class TerraineControl implements IControl {
   }
 
   onAdd(map: Map) {
-    const { extrudeOnInit = false, exaggeration, pitch = 1, ...options } = this._options;
+    const { extrudeOnInit = false, exaggeration, pitch, ...options } = this._options;
     const terrain = useTerrain(map, options);
 
     const button = document.createElement('button');
