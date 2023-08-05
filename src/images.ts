@@ -2,15 +2,18 @@ import type { Map } from 'mapbox-gl';
 
 type Image = HTMLImageElement | ImageBitmap;
 
-type ImageOptions = {
+export type ImageOptions = {
   persist?: boolean,
   pixelRatio?: number;
   sdf?: boolean,
+  stretchX?: [number, number][];
+  stretchY?: [number, number][];
+  content?: [number, number, number, number];
 };
 
 const cache: Record<string, { image: Image, options?: ImageOptions }> = {};
 
-export default (map: Map) => {
+export const useImages = (map: Map) => {
   const reloadCache = () => {
     Object.entries(cache).forEach(([name, { image, options }]) => {
       if (!map.hasImage(name)) map.addImage(name, image, options);

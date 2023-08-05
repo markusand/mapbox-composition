@@ -12,5 +12,5 @@ export type { PopupOptions } from './popup';
 export { default as useTerrain } from './terrain';
 export type { TerrainExtrusion, TerrainOptions } from './terrain';
 export * from './async';
-export { default as useImages } from './images';
+export * from './images';
 export { default as helpers } from './helpers';
