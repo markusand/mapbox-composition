@@ -1,36 +1,36 @@
-import { Map, type LngLatLike, Marker, type MarkerOptions as MMarkerOptions } from 'mapbox-gl';
+import { Map, Marker as RawMarker, type LngLatLike, type MarkerOptions as RawOptions } from 'mapbox-gl';
 import { useMarkerEvents, type MarkerEventHandlers } from './events';
-import type Popup from './popup';
-
-type MarkerPopup = ReturnType<typeof Popup>;
+import type { Popup } from './popup';
 
 export type MarkerOptions = {
   coordinates: LngLatLike;
-  popup?: MarkerPopup;
-} & MMarkerOptions & MarkerEventHandlers;
+  popup?: Popup;
+} & RawOptions & MarkerEventHandlers;
 
-export default (map: Map, options: MarkerOptions) => {
-  const { coordinates, popup, ...rest } = options;
+export const useMarker = (map: Map, options: MarkerOptions) => {
   const events = useMarkerEvents(options);
 
-  const marker = new Marker(rest);
-  let markerPopup: MarkerPopup;
-
-  const setLocation = (location: LngLatLike) => { marker.setLngLat(location).addTo(map); };
-  const setPopup = (newPopup: MarkerPopup) => {
-    markerPopup = newPopup;
-    marker.setPopup(newPopup.popup);
-  };
-
-  // Instantiate
-  if (popup) setPopup(popup);
-  setLocation(coordinates);
+  const marker = new RawMarker(options);
   events.bind(marker);
+
+  const setLocation = (location: LngLatLike) => {
+    marker.setLngLat(location).addTo(map);
+  };
+  setLocation(options.coordinates);
+
+  let markerPopup: Popup;
+  const setPopup = (popup: Popup) => {
+    markerPopup = popup;
+    marker.setPopup(popup._popup);
+  };
+  if (options.popup) setPopup(options.popup);
 
   return {
     setLocation,
-    get marker() { return marker; },
+    get _marker() { return marker; },
     get popup() { return markerPopup; },
-    set popup(newPopup) { setPopup(newPopup); },
+    set popup(popup) { setPopup(popup); },
   };
 };
+
+export type Marker = ReturnType<typeof useMarker>;
