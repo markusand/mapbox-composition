@@ -15,3 +15,16 @@ export const debounce = <T extends any[]>(callback: (...args: T) => void, delay:
     timeout = setTimeout(() => callback(...args), delay);
   };
 };
+
+export const extract = <
+  T extends object,
+  K extends keyof T,
+>(object: T, keys: readonly K[]): [Pick<T, K>, Omit<T, K>] => {
+  const { picked, omited } = keys.reduce((acc, key) => {
+    const { [key]: value, ...rest } = acc.omited;
+    return value
+      ? { picked: { ...acc.picked, [key]: value }, omited: rest as Omit<T, K> }
+      : acc;
+  }, { picked: {} as Pick<T, K>, omited: object as Omit<T, K> });
+  return [picked, omited];
+};

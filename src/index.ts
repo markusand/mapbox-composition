@@ -1,8 +1,7 @@
 export { Map, MapMouseEvent, MapTouchEvent, MapWheelEvent, type MapDataEvent, type MapBoxZoomEvent } from 'mapbox-gl';
 export * from './map';
 export * from './controls';
-export { default as useGeoJSON } from './geojson';
-export type { GeoJSONLayerOptions } from './geojson';
+export * from './geojson';
 export * from './dataset';
 export * from './marker';
 export * from './popup';
