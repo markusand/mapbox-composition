@@ -1,11 +1,12 @@
 import { Map, Marker as RawMarker, type LngLatLike, type MarkerOptions as RawOptions } from 'mapbox-gl';
 import { useMarkerEvents, type MarkerEventHandlers } from './events';
 import type { Popup } from './popup';
+import type { Prettify } from './utils';
 
-export type MarkerOptions = {
+export type MarkerOptions = Prettify<{
   coordinates: LngLatLike;
   popup?: Popup;
-} & RawOptions & MarkerEventHandlers;
+} & RawOptions & MarkerEventHandlers>;
 
 export const useMarker = (map: Map, options: MarkerOptions) => {
   const events = useMarkerEvents(options);

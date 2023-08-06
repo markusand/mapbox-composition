@@ -9,14 +9,15 @@ import {
 } from 'mapbox-gl';
 import StylesControl, { type StylesControlOptions, type StylesControlStyle } from './StylesControl';
 import TerrainControl, { type TerrainControlOptions } from './TerrainControl';
+import type { Prettify } from '../utils';
 
 export type { StylesControlOptions, StylesControlStyle, TerrainControlOptions };
 
 export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
-export type ControlOptions<T extends new (...args: any[]) => any> = {
+export type ControlOptions<T extends new (...args: any[]) => any> = Prettify<{
   position?: ControlPosition;
-} & ConstructorParameters<T>[0];
+} & ConstructorParameters<T>[0]>;
 
 export type ControlsOptions = {
   navigation: ControlOptions<typeof NavigationControl>,

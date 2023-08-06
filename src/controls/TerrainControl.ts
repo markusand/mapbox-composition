@@ -1,9 +1,10 @@
 import type { Map, IControl } from 'mapbox-gl';
 import { useTerrain, type TerrainExtrusion, type TerrainOptions } from '../terrain';
+import type { Prettify } from '../utils';
 
-export type TerrainControlOptions = {
+export type TerrainControlOptions = Prettify<{
   extrudeOnInit?: boolean,
-} & TerrainOptions & TerrainExtrusion;
+} & TerrainOptions & TerrainExtrusion>;
 
 export default class TerraineControl implements IControl {
   _options: TerrainControlOptions;

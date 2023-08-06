@@ -1,12 +1,12 @@
 import { Map, Popup as RawPopup, type LngLatLike, type PopupOptions as RawOptions } from 'mapbox-gl';
 import { usePopupEvents, type PopupEventHandlers } from './events';
-import { uuid } from './utils';
+import { uuid, type Prettify } from './utils';
 
-export type PopupOptions = {
+export type PopupOptions = Prettify<{
   name?: string;
   coordinates?: LngLatLike;
   content?: string;
-} & RawOptions & PopupEventHandlers;
+} & RawOptions & PopupEventHandlers>;
 
 export const usePopup = (...args: [Map, PopupOptions] | [PopupOptions]) => {
   const [map, options] = args.length === 1 ? [, args[0]] : args;

@@ -1,12 +1,12 @@
 import { Map, type MapboxOptions } from 'mapbox-gl';
 import { useMapEvents, type MapEventHandlers } from './events';
 import { useControls, type ControlsOptions } from './controls';
-import { capitalize, debounce } from './utils';
+import { capitalize, debounce, type Prettify } from './utils';
 
-export type MapOptions = {
+export type MapOptions = Prettify<{
   controls?: Partial<ControlsOptions>;
   debounce?: number;
-} & Omit<MapboxOptions, 'container'> & Partial<MapEventHandlers>;
+} & Omit<MapboxOptions, 'container'> & Partial<MapEventHandlers>>;
 
 const useMapResizer = (map: Map, el: string | HTMLElement, debounceTime?: number) => {
   const observer = new ResizeObserver(debounce(([entry]) => {

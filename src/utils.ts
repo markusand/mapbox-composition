@@ -1,3 +1,7 @@
+export type Prettify<T> = {
+  [k in keyof T]: T[k];
+} & {};
+
 export const uuid = (): string => Math.random().toString(36).substring(7);
 
 export const capitalize = (str: string): string => `${str.charAt(0).toUpperCase()}${str.slice(1)}`;

@@ -1,6 +1,6 @@
 import type { Map, GeoJSONSource, GeoJSONSourceOptions, Expression } from 'mapbox-gl';
 import { useDataset, type DatasetOptions } from './dataset';
-import { capitalize, extract } from './utils';
+import { capitalize, extract, type Prettify } from './utils';
 
 type ClusterOptions = {
   maxZoom?: number;
@@ -16,7 +16,7 @@ type SourceOptions = {
   cluster?: ClusterOptions;
 } & Omit<GeoJSONSourceOptions, 'data' | 'cluster' | `cluster${Capitalize<keyof ClusterOptions>}`>;
 
-export type GeoJSONLayerOptions = Omit<DatasetOptions, 'source'> & SourceOptions;
+export type GeoJSONLayerOptions = Prettify<Omit<DatasetOptions, 'source'> & SourceOptions>;
 
 const ATTRIBUTES = ['attribution', 'buffer', 'source', 'generateId', 'promoteId', 'filter', 'lineMetrics', 'maxzoom', 'tolerance', 'cluster'] as const;
 

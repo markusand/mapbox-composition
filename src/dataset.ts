@@ -9,13 +9,13 @@ export type LayerOptions = Prettify<{
   filter?: Expression;
 } & AnyLayer>;
 
-export type DatasetOptions = {
+export type DatasetOptions = Prettify<{
   id: string;
   source: AnySourceData;
   layers: LayerOptions[];
   persist?: boolean;
   under?: string;
-} & SourceEventHandlers & LayerEventHandlers;
+} & SourceEventHandlers & LayerEventHandlers>;
 
 type DatasetCache = {
   source: AnySourceData | undefined;
