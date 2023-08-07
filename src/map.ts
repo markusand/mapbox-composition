@@ -1,6 +1,7 @@
 import { Map, type MapboxOptions } from 'mapbox-gl';
 import { useMapEvents, type MapEventHandlers } from './events';
 import { useControls, type ControlsOptions } from './controls';
+import { transformRequest } from './authentication';
 import { capitalize, debounce, type Prettify } from './utils';
 
 export type MapOptions = Prettify<{
@@ -23,6 +24,7 @@ export const createMap = async (container: string | HTMLElement, options: MapOpt
   const map = new Map({
     container,
     style: 'mapbox://styles/mapbox/streets-v12',
+    transformRequest,
     ...mapOptions,
   });
   await map.once('load');

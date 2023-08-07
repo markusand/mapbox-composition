@@ -9,20 +9,20 @@ export type TilesLayerOptions = Prettify<{
   promoteId?: PromoteIdSpecification;
   tileSize?: number;
   volatile?: boolean;
+  authToken?: string;
 } & Omit<DatasetOptions, 'source'>>;
 
-const ATTRIBUTES = ['type', 'source', 'promoteId', 'volatile'] as const;
+const ATTRIBUTES = ['type', 'source', 'promoteId', 'volatile', 'authToken'] as const;
 
 export const useTiles = (map: Map, options: TilesLayerOptions) => {
-  const [{ source, ...sourceOptions }, datasetOptions] = extract(options, ATTRIBUTES);
+  const [{ source, authToken, ...sourceOptions }, datasetOptions] = extract(options, ATTRIBUTES);
 
   const dataset = useDataset(map, datasetOptions);
 
   const setSource = (tiles: string | string[] | TileJSON) => {
-    dataset.setSource({
-      ...sourceOptions,
-      ...(typeof tiles === 'string' ? { url: tiles } : Array.isArray(tiles) ? { tiles } : tiles),
-    });
+    const data = typeof tiles === 'string' ? { url: tiles } : Array.isArray(tiles) ? { tiles } : tiles;
+    if (authToken) dataset.auth.set(Object.values(data), authToken);
+    dataset.setSource({ ...sourceOptions, ...data });
   };
 
   if (source) setSource(source);
@@ -30,9 +30,19 @@ export const useTiles = (map: Map, options: TilesLayerOptions) => {
   const updateSource = (tiles: string | string[]) => {
     const _source = map.getSource(options.id) as VectorSourceImpl;
     if (!_source) return;
-    if (typeof tiles === 'string') _source.setUrl(tiles);
-    else _source.setTiles(tiles);
+    if (typeof tiles === 'string') {
+      _source.setUrl(tiles);
+      dataset.auth.updateURLs([tiles]);
+    } else {
+      _source.setTiles(tiles);
+      dataset.auth.updateURLs(tiles);
+    }
   };
 
-  return { ...dataset, setSource, updateSource };
+  const clearSource = () => {
+    dataset.clearSource();
+    dataset.auth.clear();
+  };
+
+  return { ...dataset, setSource, updateSource, clearSource };
 };

@@ -1,6 +1,9 @@
 import type { Map, AnySourceData, AnyLayer, Expression, CustomLayerInterface } from 'mapbox-gl';
 import { useSourceEvents, useLayerEvents, type SourceEventHandlers, type LayerEventHandlers } from './events';
+import { useAuthentication } from './authentication';
 import type { Prettify } from './utils';
+
+export type { SourceEventHandlers };
 
 export type LayerOptions = Prettify<{
   visible?: boolean;
@@ -27,6 +30,7 @@ const isCustomLayer = (layer: AnyLayer): layer is CustomLayerInterface => layer.
 export const useDataset = (map: Map, options: DatasetOptions) => {
   const sourceEvents = useSourceEvents(map, options.id, options);
   const layerEvents = useLayerEvents(map, options);
+  const auth = useAuthentication(options.id);
 
   const cache: DatasetCache = {
     source: undefined,
@@ -101,6 +105,7 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
   };
 
   const setSource = (source: AnySourceData) => {
+    sourceEvents.bind();
     map.addSource(options.id, source);
     addLayers(options.layers);
     if (options.persist ?? true) {
@@ -121,6 +126,7 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
     isVisible,
     setVisibility,
     setFilter,
+    auth,
   };
 };
 
