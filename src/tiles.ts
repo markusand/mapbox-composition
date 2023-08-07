@@ -5,7 +5,7 @@ import { extract, type Prettify } from './utils';
 
 export type TilesLayerOptions = Prettify<{
   type: 'vector' | 'raster';
-  source: string | string[] | TileJSON;
+  source?: string | string[] | TileJSON;
   promoteId?: PromoteIdSpecification;
   tileSize?: number;
   volatile?: boolean;
@@ -14,22 +14,25 @@ export type TilesLayerOptions = Prettify<{
 const ATTRIBUTES = ['type', 'source', 'promoteId', 'volatile'] as const;
 
 export const useTiles = (map: Map, options: TilesLayerOptions) => {
-  const [{ source: tiles, ...sourceOptions }, datasetOptions] = extract(options, ATTRIBUTES);
+  const [{ source, ...sourceOptions }, datasetOptions] = extract(options, ATTRIBUTES);
 
-  const dataset = useDataset(map, {
-    ...datasetOptions,
-    source: {
+  const dataset = useDataset(map, datasetOptions);
+
+  const setSource = (tiles: string | string[] | TileJSON) => {
+    dataset.setSource({
       ...sourceOptions,
       ...(typeof tiles === 'string' ? { url: tiles } : Array.isArray(tiles) ? { tiles } : tiles),
-    },
-  });
-
-  const updateSource = (update: string | string[]) => {
-    const source = map.getSource(options.id) as VectorSourceImpl;
-    if (!source) return;
-    if (typeof update === 'string') source.setUrl(update);
-    else source.setTiles(update);
+    });
   };
 
-  return { ...dataset, updateSource };
+  if (source) setSource(source);
+
+  const updateSource = (tiles: string | string[]) => {
+    const _source = map.getSource(options.id) as VectorSourceImpl;
+    if (!_source) return;
+    if (typeof tiles === 'string') _source.setUrl(tiles);
+    else _source.setTiles(tiles);
+  };
+
+  return { ...dataset, setSource, updateSource };
 };

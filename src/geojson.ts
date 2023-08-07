@@ -12,7 +12,7 @@ type ClusterOptions = {
 export type GeoJSONData = GeoJSONSourceOptions['data'];
 
 type SourceOptions = {
-  source: GeoJSONData;
+  source?: GeoJSONData;
   cluster?: ClusterOptions;
 } & Omit<GeoJSONSourceOptions, 'data' | 'cluster' | `cluster${Capitalize<keyof ClusterOptions>}`>;
 
@@ -20,35 +20,35 @@ export type GeoJSONLayerOptions = Prettify<Omit<DatasetOptions, 'source'> & Sour
 
 const ATTRIBUTES = ['attribution', 'buffer', 'source', 'generateId', 'promoteId', 'filter', 'lineMetrics', 'maxzoom', 'tolerance', 'cluster'] as const;
 
+const clusterize = (cluster: ClusterOptions) => Object.fromEntries(
+  Object.entries(cluster).map(([attr, value]) => [`cluster${capitalize(attr)}`, value]),
+);
+
 export const useGeoJSON = (map: Map, options: GeoJSONLayerOptions) => {
   const [
-    { source: data, cluster, ...sourceOptions },
+    { source, cluster, ...sourceOptions },
     datasetOptions,
   ] = extract(options, ATTRIBUTES);
 
-  const clusterOptions = cluster
-    ? {
-      cluster: true,
-      ...Object.fromEntries(
-        Object.entries(cluster)
-          .map(([attr, value]) => [`cluster${capitalize(attr)}`, value]),
-      ),
-    } : {};
+  const clusterOptions = cluster ? { cluster: true, ...clusterize(cluster) } : {};
 
-  const dataset = useDataset(map, {
-    ...datasetOptions,
-    source: {
+  const dataset = useDataset(map, datasetOptions);
+
+  const setSource = (geojson: GeoJSONData) => {
+    dataset.setSource({
       ...sourceOptions,
       ...clusterOptions,
       type: 'geojson',
-      data,
-    },
-  });
-
-  const updateSource = (update: Parameters<GeoJSONSource['setData']>[0]) => {
-    const source = map.getSource(options.id) as GeoJSONSource;
-    if (source) source.setData(update);
+      data: geojson,
+    });
   };
 
-  return { ...dataset, updateSource };
+  if (source) setSource(source);
+
+  const updateSource = (geojson: Parameters<GeoJSONSource['setData']>[0]) => {
+    const _source = map.getSource(options.id) as GeoJSONSource;
+    if (_source) _source.setData(geojson);
+  };
+
+  return { ...dataset, setSource, updateSource };
 };

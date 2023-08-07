@@ -31,7 +31,12 @@
     "no-sparse-arrays": "off",
     "no-underscore-dangle": ["error", {
       "allowAfterThis": true,
-      "allow": ["_popup", "_marker"]
+      "allow": ["_popup", "_marker", "_source"]
+    }],
+    "@typescript-eslint/naming-convention": ["error", {
+      "selector": "variable",
+      "format": ["camelCase", "UPPER_CASE"],
+      "leadingUnderscore": "allow"
     }],
     "import/extensions": ["error", "ignorePackages", {
       "js": "never",

@@ -11,7 +11,7 @@ export type LayerOptions = Prettify<{
 
 export type DatasetOptions = Prettify<{
   id: string;
-  source: AnySourceData;
+  source?: AnySourceData;
   layers: LayerOptions[];
   persist?: boolean;
   under?: string;
@@ -102,14 +102,14 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
 
   const setSource = (source: AnySourceData) => {
     map.addSource(options.id, source);
+    addLayers(options.layers);
     if (options.persist ?? true) {
       cache.source = source;
       map.on('style.load', reloadCache);
     }
   };
 
-  setSource(options.source);
-  addLayers(options.layers);
+  if (options.source) setSource(options.source);
 
   return {
     clearLayers,
@@ -118,11 +118,9 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
     hasLayer,
     clearSource,
     setSource,
-    // updateSource,
     isVisible,
     setVisibility,
     setFilter,
-    type: options.source.type,
   };
 };
 
