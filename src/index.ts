@@ -8,4 +8,6 @@ export * from './popup';
 export * from './terrain';
 export * from './async';
 export * from './images';
+export type * from './tilejson';
+export * from './tiles';
 export { default as helpers } from './helpers';
