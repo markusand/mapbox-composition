@@ -9,7 +9,8 @@ type ClusterOptions = {
   radius?: number;
 };
 
-export type GeoJSONData = GeoJSONSourceOptions['data'];
+// Fix @types/mapbox-gl type including String instead of string 🤷🏻‍♂️
+export type GeoJSONData = string | Exclude<Parameters<GeoJSONSource['setData']>[0], String>;
 
 type SourceOptions = {
   source?: MaybePromise<GeoJSONData>;
@@ -48,7 +49,7 @@ export const useGeoJSON = (map: Map, options: GeoJSONLayerOptions) => {
 
   if (source) setSource(source);
 
-  const updateSource = (geojson: Parameters<GeoJSONSource['setData']>[0]) => {
+  const updateSource = (geojson: GeoJSONData) => {
     const _source = map.getSource(options.id) as GeoJSONSource;
     if (_source) _source.setData(geojson);
     if (typeof geojson === 'string') dataset.auth.updateURLs([geojson]);
