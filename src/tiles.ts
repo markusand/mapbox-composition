@@ -20,7 +20,7 @@ export const useTiles = (map: Map, options: TilesLayerOptions) => {
   const dataset = useDataset(map, datasetOptions);
 
   const setSource = (tiles: string | string[] | TileJSON) => {
-    const data = typeof tiles === 'string' ? { url: tiles } : Array.isArray(tiles) ? { tiles } : tiles;
+    const data = typeof tiles === 'string' ? { url: tiles } : Array.isArray(tiles) ? { tiles } : { tiles: tiles.tiles };
     if (authToken) dataset.auth.set(Object.values(data), authToken);
     dataset.setSource({ ...sourceOptions, ...data });
   };
