@@ -1,5 +1,5 @@
-import { LngLatBounds, type LngLatLike } from 'mapbox-gl';
-import type { FeatureCollection, Feature, Geometry, Position } from 'geojson';
+import { LngLatBounds } from 'mapbox-gl';
+import type { FeatureCollection, Feature, Geometry } from 'geojson';
 
 type GeometryType = Exclude<Geometry['type'], 'GeometryCollection'>;
 
@@ -16,8 +16,8 @@ const bbox = (geojson: FeatureCollection | Feature) => {
   const features = 'features' in geojson ? geojson.features : [geojson];
   return features.reduce((acc, { geometry }) => {
     if (geometry.type !== 'GeometryCollection') {
-      const coordinates = [geometry.coordinates].flat(depth[geometry.type]) as Position[];
-      coordinates.forEach(coordinate => acc.extend(coordinate as LngLatLike));
+      const coordinates = [geometry.coordinates].flat(depth[geometry.type]) as [number, number][];
+      coordinates.forEach(coordinate => acc.extend(coordinate));
     }
     return acc;
   }, new LngLatBounds());

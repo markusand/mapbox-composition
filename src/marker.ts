@@ -1,39 +1,37 @@
-import { Map, type LngLatLike, Marker, type MarkerOptions as MMarkerOptions, type MapboxEvent } from 'mapbox-gl';
-import { useMarkerEvents } from './events';
-import type Popup from './popup';
+import { Map, Marker as RawMarker, type LngLatLike, type MarkerOptions as RawOptions } from 'mapbox-gl';
+import { useMarkerEvents, type MarkerEventHandlers } from './events';
+import type { Popup } from './popup';
+import type { Prettify } from './utils';
 
-type MarkerPopup = ReturnType<typeof Popup>;
-
-export type MarkerOptions = {
+export type MarkerOptions = Prettify<{
   coordinates: LngLatLike;
-  popup?: MarkerPopup;
-  onDragStart?: (event: MapboxEvent) => void,
-  onDrag?: (event: MapboxEvent) => void,
-  onDragEnd?: (event: MapboxEvent) => void;
-} & MMarkerOptions;
+  popup?: Popup;
+} & RawOptions & MarkerEventHandlers>;
 
-export default (map: Map, options: MarkerOptions) => {
-  const { coordinates, popup, ...rest } = options;
-  const { bindMarkerEvents } = useMarkerEvents(options);
+export const useMarker = (map: Map, options: MarkerOptions) => {
+  const events = useMarkerEvents(options);
 
-  const marker = new Marker(rest);
-  let markerPopup: MarkerPopup;
+  const marker = new RawMarker(options);
+  events.bind(marker);
 
-  const setLocation = (location: LngLatLike) => { marker.setLngLat(location).addTo(map); };
-  const setPopup = (newPopup: MarkerPopup) => {
-    markerPopup = newPopup;
-    marker.setPopup(newPopup.popup);
+  const setLocation = (location: LngLatLike) => {
+    marker.setLngLat(location).addTo(map);
   };
+  setLocation(options.coordinates);
 
-  // Instantiate
-  if (popup) setPopup(popup);
-  setLocation(coordinates);
-  bindMarkerEvents(marker);
+  let markerPopup: Popup;
+  const setPopup = (popup: Popup) => {
+    markerPopup = popup;
+    marker.setPopup(popup._popup);
+  };
+  if (options.popup) setPopup(options.popup);
 
   return {
     setLocation,
-    get marker() { return marker; },
+    get _marker() { return marker; },
     get popup() { return markerPopup; },
-    set popup(newPopup) { setPopup(newPopup); },
+    set popup(popup) { setPopup(popup); },
   };
 };
+
+export type Marker = ReturnType<typeof useMarker>;

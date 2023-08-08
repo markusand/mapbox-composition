@@ -1,5 +1,5 @@
-export { default as useMapEvents } from './events.map';
-export { default as useSourceEvents } from './events.source';
-export { default as useLayerEvents } from './events.layer';
-export { default as useMarkerEvents } from './events.marker';
-export { default as usePopupEvents } from './events.popup';
+export * from './events.map';
+export * from './events.source';
+export * from './events.layer';
+export * from './events.marker';
+export * from './events.popup';

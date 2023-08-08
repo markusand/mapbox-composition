@@ -1,16 +1,24 @@
 import type { Popup, EventedListener } from 'mapbox-gl';
-import type { PopupOptions } from '../popup';
 
-export default ({ onOpen, onClose }: PopupOptions) => {
-  const bindPopupEvents = (popup: Popup) => {
+export type PopupEvent<T> = { type: T, target: Popup };
+
+export type PopupEventHandlers = {
+  onOpen?: (event: PopupEvent<'open'>) => void;
+  onClose?: (event: PopupEvent<'close'>) => void;
+};
+
+export const usePopupEvents = (handlers: PopupEventHandlers) => {
+  const { onOpen, onClose } = handlers;
+
+  const bind = (popup: Popup) => {
     if (onOpen) popup.on('open', onOpen as EventedListener);
     if (onClose) popup.on('close', onClose as EventedListener);
   };
 
-  const unbindPopupEvents = (popup: Popup) => {
-    popup.off('open', onOpen as EventedListener);
-    popup.off('close', onClose as EventedListener);
+  const unbind = (popup: Popup) => {
+    if (onOpen) popup.off('open', onOpen as EventedListener);
+    if (onClose) popup.off('close', onClose as EventedListener);
   };
 
-  return { bindPopupEvents, unbindPopupEvents };
+  return { bind, unbind };
 };

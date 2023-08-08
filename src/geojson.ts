@@ -1,31 +1,66 @@
-import type { Map, GeoJSONSourceRaw, GeoJSONSource, GeoJSONSourceOptions } from 'mapbox-gl';
-import type { Feature, Geometry, FeatureCollection } from 'geojson';
-import useLayer, { type BaseLayerOptions } from './layer';
+import type { Map, GeoJSONSource, GeoJSONSourceOptions, Expression } from 'mapbox-gl';
+import { useDataset, type DatasetOptions } from './dataset';
+import { capitalize, extract, type Prettify, type MaybePromise } from './utils';
 
-export type GeoJSONLayerOptions = {
-  source: GeoJSONSourceOptions | Feature<Geometry> | FeatureCollection<Geometry> | string,
-} & Omit<BaseLayerOptions, 'type' | 'source'>;
+type ClusterOptions = {
+  maxZoom?: number;
+  minPoints?: number;
+  properties?: Record<string, Expression>;
+  radius?: number;
+};
 
-const isString = (item: any): item is string => typeof item === 'string';
-const isGeo = (item: any): item is Feature<Geometry> | FeatureCollection<Geometry> => (
-  'type' in item && (item.type === 'Feature' || item.type === 'FeatureCollection')
+// Fix @types/mapbox-gl type including String instead of string 🤷🏻‍♂️
+export type GeoJSONData = string | Exclude<Parameters<GeoJSONSource['setData']>[0], String>;
+
+type SourceOptions = {
+  source?: MaybePromise<GeoJSONData>;
+  cluster?: ClusterOptions;
+  authToken?: string;
+} & Omit<GeoJSONSourceOptions, 'data' | 'cluster' | `cluster${Capitalize<keyof ClusterOptions>}`>;
+
+export type GeoJSONLayerOptions = Prettify<Omit<DatasetOptions, 'source'> & SourceOptions>;
+
+const ATTRIBUTES = ['authToken', 'attribution', 'buffer', 'source', 'generateId', 'promoteId', 'filter', 'lineMetrics', 'maxzoom', 'tolerance', 'cluster'] as const;
+
+const clusterize = (cluster: ClusterOptions) => Object.fromEntries(
+  Object.entries(cluster).map(([attr, value]) => [`cluster${capitalize(attr)}`, value]),
 );
 
-const getSource = (source: any) => isString(source) || isGeo(source) ? { data: source } : source;
+export const useGeoJSON = (map: Map, options: GeoJSONLayerOptions) => {
+  const [
+    { source, cluster, authToken, ...sourceOptions },
+    datasetOptions,
+  ] = extract(options, ATTRIBUTES);
 
-export default (map: Map, options: GeoJSONLayerOptions) => {
-  const layer = useLayer(map, {
-    ...options,
-    type: 'geojson',
-    source: getSource(options.source),
-  });
+  const clusterOptions = cluster ? { cluster: true, ...clusterize(cluster) } : {};
 
-  // Override. GeoJSON can be updated by setting new data
-  const updateSource = (data: Feature<Geometry> | FeatureCollection<Geometry> | string) => {
-    const source = map.getSource(options.name) as GeoJSONSource;
-    if (source) source.setData(data);
-    else layer.updateSource({ data } as GeoJSONSourceRaw);
+  const dataset = useDataset(map, datasetOptions);
+
+  const setSource = async (geojson: MaybePromise<GeoJSONData>) => {
+    const data = await geojson;
+    if (authToken && typeof data === 'string') dataset.auth.set([data], authToken);
+    await dataset.setSource({
+      ...sourceOptions,
+      ...clusterOptions,
+      type: 'geojson',
+      data,
+    });
   };
 
-  return { ...layer, updateSource };
+  if (source) setSource(source);
+
+  const updateSource = (geojson: GeoJSONData) => {
+    const _source = map.getSource(options.id) as GeoJSONSource;
+    if (_source) _source.setData(geojson);
+    if (typeof geojson === 'string') dataset.auth.updateURLs([geojson]);
+  };
+
+  const clearSource = () => {
+    dataset.clearSource();
+    dataset.auth.clear();
+  };
+
+  return { ...dataset, setSource, updateSource, clearSource };
 };
+
+export type GeoJSONLayer = ReturnType<typeof useGeoJSON>;

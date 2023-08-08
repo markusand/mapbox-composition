@@ -29,7 +29,15 @@
     "no-promise-executor-return": "off",
     "no-nested-ternary": "off",
     "no-sparse-arrays": "off",
-    "no-underscore-dangle": ["error", { "allowAfterThis": true }],
+    "no-underscore-dangle": ["error", {
+      "allowAfterThis": true,
+      "allow": ["_popup", "_marker", "_source"]
+    }],
+    "@typescript-eslint/naming-convention": ["error", {
+      "selector": "variable",
+      "format": ["camelCase", "UPPER_CASE"],
+      "leadingUnderscore": "allow"
+    }],
     "import/extensions": ["error", "ignorePackages", {
       "js": "never",
       "ts": "never"
