@@ -162,7 +162,7 @@ console.log('Arrived at Berkeley');
 
 Load many layers to map. Options accept `source` and `layers` attributes, being source any valid style specification [Source](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) and being every layers object a valid style specification [Layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers). Note layer options do not need a `source` attribute as will directly take the source name.
 
-Source load can be deferred for async loadings by using the `setSource` method returned by useDataset.
+The `source` parameter accepts a promise to load async data. Additionaly, use the `setSource` method to initialize the data at convenience, for example after a user interaction.
 
 Sources and layers are restored by default after map style changes. To disable this behaviour, set `persist` attribute to false on layer config object.
 
