@@ -16,7 +16,7 @@ npm i mapbox-gl mapbox-composition
 
 ```javascript
 import { onMounted } from 'vue';
-import { useMap, useControls, useGeoJSON, useMarker, usePopup } from 'mapbox-composition';
+import { createMap, useControls, useGeoJSON, useMarker, usePopup } from 'mapbox-composition';
 
 const { MAPBOX_TOKEN } = process.env;
 
@@ -24,7 +24,7 @@ export default {
   name: 'Map',
   setup() {
     onMounted(async () => {
-      const map = await useMap('map', {
+      const map = await createMap('map', {
         accessToken: MAPBOX_TOKEN,
         style: 'mapbox://styles/mapbox/light-v9',
         center: [-122.447303, 37.753574],
@@ -35,7 +35,7 @@ export default {
       addNavigation({ position: 'top-left' });
 
       useGeoJSON(map, {
-        name: 'facilities',
+        id: 'facilities',
         source: 'https://data.sfgov.org/resource/nc68-ngbr.geojson',
         layers: [
           { name: 'markers', type: 'circle', paint: { 'circle-color': '#39f' } },
@@ -54,7 +54,7 @@ export default {
 };
 ```
 
-### useMap(container, options)
+### createMap(container, options)
 
 Load a map. This function must be called inside the onMounted hook, after the DOM container has been mounted.
 
@@ -62,24 +62,21 @@ Load is asynchronous, and the function returns a promise that resolves to the Ma
 
 ```javascript
 onMounted(async () => {
-  const map = await useMap('map', { /* Options */ });
+  const map = await createMap('map', { /* Options */ });
 });
 ```
 
-Options object accepts all Mapbox [Map parameters](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters). Can also include a `controls` attrtbiute with options to automatically initialize controls at map load.
+Options object accepts all Mapbox [Map parameters](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters). Can also include a `controls` attrtbiute with options to automatically initialize controls at map load. Add a debounce parameter to control the resize timing.
 
 Handlers for any [map event](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-events) can be added using the event name prefixed with `on`, such as follows
 
 ```javascript
-useMap('map', {
+createMap('map', {
   // Many options...
-  onZoomEnd: () => console.log('Zoomed'),
-  onFlyToEnd: () => console.log('Fly finished!'),
-  onDragEnd: () => console.log('Dragged'),
+  onZoomend: () => console.log('Zoom End'),
+  onDragend: () => console.log('Dragged'),
 })
 ```
-
-Note that handlers for async events can also be defined, as long as `useAsync` is used.
 
 ### useTerrain(map, options)
 
@@ -161,9 +158,11 @@ await flyTo({ center: [-122.272998, 37.871559] });
 console.log('Arrived at Berkeley');
 ```
 
-### useLayer(map, options)
+### useDataset(map, options)
 
-Load one (or many) layers to map. Options require `source` and `layers` attributes, being source any valid style specification [Source](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) and being every layers object a valid style specification [Layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers). Note layer options do not need a `source` attribute as will directly take the source name.
+Load many layers to map. Options accept `source` and `layers` attributes, being source any valid style specification [Source](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) and being every layers object a valid style specification [Layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers). Note layer options do not need a `source` attribute as will directly take the source name.
+
+Source load can be deferred for async loadings by using the `setSource` method returned by useDataset.
 
 Sources and layers are restored by default after map style changes. To disable this behaviour, set `persist` attribute to false on layer config object.
 
@@ -172,7 +171,7 @@ Layers can be placed under another specific layer by setting the attribute `unde
 Options object may include event handlers for source events `onError`, `onLoadStart`, `onLoadEnd` and layer events `onClick` and `onHover`.
 
 ```javascript
-const layers = useLayer(map, {
+const dataset = useDataset(map, {
   name: 'gkhj45665',
   source: {
     type: 'vector',
@@ -186,9 +185,7 @@ const layers = useLayer(map, {
 });
 ```
 
-Use `useGeoJSON(map, options)` as a shortcut for GeoJSON sources that brings enhancements in their management. The `source` attribute can be a GeoJSON url or a GeoJSON object.
-
-The function returns manipulators for layers and source `isVisible(layer_id)`, `setVisibility(isVisible, [,layer_names])`, `setFilters(filters, [,layer_names])`, `clearLayers([layer_names])`, `updateLayers(layers)`, `addLayers(layers)`, `clearSource`, `setSource(source)` and `updateSource(source, [,layers])`. If the layer_names array is not provided, the action will be performed to all layers.
+The function returns manipulators for layers `isVisible(layer_id)`, `setVisibility(isVisible, [,layer_names])`, `setFilters(filters, [,layer_names])`, `clearLayers([layer_names])`, `updateLayers(layers)`, `addLayers(layers)`, `clearSource`, `setSource(source)`. If the layer_names array is not provided, the action will be performed to all layers.
 
 ```javascript
 const { setVisibility, setFilters, updateSource } = useGeoJSON(map, { /* options */ });
@@ -196,6 +193,17 @@ setFilters(['==', ['get', 'type'], 'hospital']);
 setVisibility(false, ['layer--1']);
 updateSource('http://api.example.com/data/example.geojson');
 ```
+
+useDataset does not return an `updateSource(source, [,layers])` method. Use provided helper shortcuts to improve typing and performance, and to modify data afterwards.
+
+```javascript
+const geojsonLayer = useGeoJSON(map, /* GeoJSON options */)
+const imageLayer = useImage(map, /* Images options */)
+const videoLayer = useVideo(map, /* Video options */)
+const tilesLayer = useTiles(map, /* Vector or aster tiles options */)
+```
+
+This shortcuts also include an `authToken` parameter to set source based authentication with bearer token. Use `updateToken` from the auth returned atribute to refresh expirable tokens such as JWT.
 
 ### useMarker(map, options)
 
@@ -234,12 +242,12 @@ const popup = usePopup(map, {
 
 The function returns `setLocation` and `setContent` modificators, and getters for `name` and the Mapbox popup instance.
 
-If no `content` is provided, a container div is created with the `name` id (must be unique), and more complex layouts can be created using the Vue's [teleport](https://v3.vuejs.org/guide/teleport.html) pattern.
+If no `content` is provided, a container div is created with the `name` id (must be unique), and more complex layouts can be created using patterns like Vue's [teleport](https://v3.vuejs.org/guide/teleport.html).
 
 ```html
-<teleport v-if="showPopup" to="#my-popup">
+<Teleport v-if="showPopup" to="#my-popup">
   <!-- Complex HTML layout -->
-</teleport>
+</Teleport>
 ```
 
 The `map` attribute is not required when binding popup to a marker, as well as the `coordinates` options parameter.
@@ -262,7 +270,7 @@ Load images to be used as icons on the map.
 
 Returns `addImages(images, options)` and `removeImages(images)`. Images are added asynchronously and are not displayed on the map until they are loaded.
 
-Options object accepts `persist` attribute (defaults to true) to reload images after map style changes. Also accepts `sdf` and `pixelRatio` [image parameters](https://docs.mapbox.com/mapbox-gl-js/api/map/#addimage-parameters).
+Options object accepts `persist` attribute (defaults to true) to reload images after map style changes. Also accepts `sdf`, stretching, and `pixelRatio` [image parameters](https://docs.mapbox.com/mapbox-gl-js/api/map/#addimage-parameters).
 
 ```javascript
 const images = {
@@ -275,3 +283,19 @@ await addImages(images, { sdf: true });
 removeImages(images);
 // or removeImages(['my-icon', 'my-other']);
 ```
+
+### Helpers
+
+Package exports helper utilities.
+
+At the moment there is only a `bbox` method that receives a a Feature or FeatureCollection and returns its containing bounding box.
+
+## Contribute
+
+Contributions are welcome. Feel free to open a pull request.
+
+By contributing to this project, you agree to license your contributions under the terms of the ISC License.
+
+## License
+
+This package is licensed under the [ISC License](./LICENSE.md)
