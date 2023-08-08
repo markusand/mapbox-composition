@@ -13,7 +13,6 @@ export type ImageLayerOptions = Prettify<{
 } & Omit<DatasetOptions, 'source'>>;
 
 export const useImage = (map: Map, options: ImageLayerOptions) => {
-  // const [{ source, authToken, datasetOptions] = extract(options, ATTRIBUTES);
   const { source, authToken, ...datasetOptions } = options;
 
   const dataset = useDataset(map, datasetOptions);
