@@ -1,11 +1,11 @@
 import type { Map, VectorSourceImpl, PromoteIdSpecification } from 'mapbox-gl';
 import { useDataset, type DatasetOptions } from './dataset';
 import type { TileJSON } from './tilejson';
-import { extract, type Prettify } from './utils';
+import { extract, type Prettify, type MaybePromise } from './utils';
 
 export type TilesLayerOptions = Prettify<{
   type: 'vector' | 'raster';
-  source?: string | string[] | TileJSON;
+  source?: MaybePromise<string | string[] | TileJSON>;
   promoteId?: PromoteIdSpecification;
   tileSize?: number;
   volatile?: boolean;
@@ -19,10 +19,11 @@ export const useTiles = (map: Map, options: TilesLayerOptions) => {
 
   const dataset = useDataset(map, datasetOptions);
 
-  const setSource = (tiles: string | string[] | TileJSON) => {
+  const setSource = async (input: MaybePromise<string | string[] | TileJSON>) => {
+    const tiles = await input;
     const data = typeof tiles === 'string' ? { url: tiles } : Array.isArray(tiles) ? { tiles } : { tiles: tiles.tiles };
     if (authToken) dataset.auth.set(Object.values(data), authToken);
-    dataset.setSource({ ...sourceOptions, ...data });
+    await dataset.setSource({ ...sourceOptions, ...data });
   };
 
   if (source) setSource(source);

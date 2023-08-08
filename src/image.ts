@@ -1,6 +1,6 @@
 import type { Map, ImageSource } from 'mapbox-gl';
 import { useDataset, type DatasetOptions } from './dataset';
-import { type Prettify } from './utils';
+import { type Prettify, type MaybePromise } from './utils';
 
 export type ImageData = {
   url: string;
@@ -8,7 +8,7 @@ export type ImageData = {
 };
 
 export type ImageLayerOptions = Prettify<{
-  source?: ImageData;
+  source?: MaybePromise<ImageData>;
   authToken?: string;
 } & Omit<DatasetOptions, 'source'>>;
 
@@ -17,9 +17,10 @@ export const useImage = (map: Map, options: ImageLayerOptions) => {
 
   const dataset = useDataset(map, datasetOptions);
 
-  const setSource = ({ url, corners: coordinates }: ImageData) => {
+  const setSource = async (input: MaybePromise<ImageData>) => {
+    const { url, corners: coordinates } = await input;
     if (authToken) dataset.auth.set([url], authToken);
-    dataset.setSource({ type: 'image', url, coordinates });
+    await dataset.setSource({ type: 'image', url, coordinates });
   };
 
   if (source) setSource(source);

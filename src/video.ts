@@ -1,6 +1,6 @@
 import type { Map, VideoSource } from 'mapbox-gl';
 import { useDataset, type DatasetOptions } from './dataset';
-import { type Prettify } from './utils';
+import { type Prettify, type MaybePromise } from './utils';
 
 // @types/mapbox-gl has outdated type for VideoSource
 type UpdatedVideoSource = {
@@ -14,7 +14,7 @@ export type VideoData = {
 };
 
 export type VideoLayerOptions = Prettify<{
-  source?: VideoData;
+  source?: MaybePromise<VideoData>;
   authToken?: string;
 } & Omit<DatasetOptions, 'source'>>;
 
@@ -23,9 +23,10 @@ export const useVideo = (map: Map, options: VideoLayerOptions) => {
 
   const dataset = useDataset(map, datasetOptions);
 
-  const setSource = ({ urls, corners: coordinates }: VideoData) => {
+  const setSource = async (input: MaybePromise<VideoData>) => {
+    const { urls, corners: coordinates } = await input;
     if (authToken) dataset.auth.set(urls, authToken);
-    dataset.setSource({ type: 'video', urls, coordinates });
+    await dataset.setSource({ type: 'video', urls, coordinates });
   };
 
   if (source) setSource(source);

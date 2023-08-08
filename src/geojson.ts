@@ -1,6 +1,6 @@
 import type { Map, GeoJSONSource, GeoJSONSourceOptions, Expression } from 'mapbox-gl';
 import { useDataset, type DatasetOptions } from './dataset';
-import { capitalize, extract, type Prettify } from './utils';
+import { capitalize, extract, type Prettify, type MaybePromise } from './utils';
 
 type ClusterOptions = {
   maxZoom?: number;
@@ -12,7 +12,7 @@ type ClusterOptions = {
 export type GeoJSONData = GeoJSONSourceOptions['data'];
 
 type SourceOptions = {
-  source?: GeoJSONData;
+  source?: MaybePromise<GeoJSONData>;
   cluster?: ClusterOptions;
   authToken?: string;
 } & Omit<GeoJSONSourceOptions, 'data' | 'cluster' | `cluster${Capitalize<keyof ClusterOptions>}`>;
@@ -35,13 +35,14 @@ export const useGeoJSON = (map: Map, options: GeoJSONLayerOptions) => {
 
   const dataset = useDataset(map, datasetOptions);
 
-  const setSource = (geojson: GeoJSONData) => {
-    if (authToken && typeof geojson === 'string') dataset.auth.set([geojson], authToken);
-    dataset.setSource({
+  const setSource = async (geojson: MaybePromise<GeoJSONData>) => {
+    const data = await geojson;
+    if (authToken && typeof data === 'string') dataset.auth.set([data], authToken);
+    await dataset.setSource({
       ...sourceOptions,
       ...clusterOptions,
       type: 'geojson',
-      data: geojson,
+      data,
     });
   };
 

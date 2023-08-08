@@ -1,7 +1,7 @@
 import type { Map, AnySourceData, AnyLayer, Expression, CustomLayerInterface } from 'mapbox-gl';
 import { useSourceEvents, useLayerEvents, type SourceEventHandlers, type LayerEventHandlers } from './events';
 import { useAuthentication } from './authentication';
-import type { Prettify } from './utils';
+import type { Prettify, MaybePromise } from './utils';
 
 export type { SourceEventHandlers };
 
@@ -14,7 +14,7 @@ export type LayerOptions = Prettify<{
 
 export type DatasetOptions = Prettify<{
   id: string;
-  source?: AnySourceData;
+  source?: MaybePromise<AnySourceData>;
   layers: LayerOptions[];
   persist?: boolean;
   under?: string;
@@ -105,7 +105,8 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
     map.off('style.load', reloadCache);
   };
 
-  const setSource = (source: AnySourceData) => {
+  const setSource = async (input: MaybePromise<AnySourceData>) => {
+    const source = await input;
     sourceEvents.bind();
     map.addSource(options.id, source);
     addLayers(options.layers);
