@@ -11,4 +11,5 @@ export * from './images';
 export type * from './tilejson';
 export * from './tiles';
 export * from './image';
+export * from './video';
 export { default as helpers } from './helpers';
