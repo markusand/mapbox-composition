@@ -42,3 +42,5 @@ export const useImage = (map: Map, options: ImageLayerOptions) => {
 
   return { ...dataset, setSource, updateSource, clearSource };
 };
+
+export type ImageLayer = ReturnType<typeof useImage>;

@@ -60,3 +60,5 @@ export const useGeoJSON = (map: Map, options: GeoJSONLayerOptions) => {
 
   return { ...dataset, setSource, updateSource, clearSource };
 };
+
+export type GeoJSONLayer = ReturnType<typeof useGeoJSON>;

@@ -46,3 +46,5 @@ export const useTiles = (map: Map, options: TilesLayerOptions) => {
 
   return { ...dataset, setSource, updateSource, clearSource };
 };
+
+export type TilesLayer = ReturnType<typeof useTiles>;

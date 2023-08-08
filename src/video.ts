@@ -53,3 +53,5 @@ export const useVideo = (map: Map, options: VideoLayerOptions) => {
 
   return { ...dataset, setSource, updateSource, clearSource, play, pause };
 };
+
+export type VideoLayer = ReturnType<typeof useVideo>;
