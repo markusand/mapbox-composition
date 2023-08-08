@@ -8,7 +8,7 @@ export type { SourceEventHandlers };
 export type LayerOptions = Prettify<{
   visible?: boolean;
   under?: string;
-  // TODO add `over`
+  over?: string;
   filter?: Expression;
 } & AnyLayer>;
 
@@ -69,10 +69,11 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
   const updateLayers = (layers: LayerOptions[]) => {
     layers.forEach(layer => {
       // @ts-ignore TS does not recognise paint and layout in AnyLayer union type
-      const { id, visible, filter, under, paint = {}, layout = {} } = layer;
+      const { id, visible, filter, under, over, paint = {}, layout = {} } = layer;
       if (visible !== undefined) setVisibility(visible, [id]);
       if (filter !== undefined) setFilter(filter, [id]);
       if (under && map.getLayer(under)) map.moveLayer(id, under);
+      if (over && map.getLayer(over)) map.moveLayer(over, id);
       Object.entries(paint).forEach(([prop, value]) => map.setPaintProperty(id, prop, value));
       Object.entries(layout).forEach(([prop, value]) => map.setLayoutProperty(id, prop, value));
       cache.layers[id] = layer;
