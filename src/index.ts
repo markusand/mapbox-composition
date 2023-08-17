@@ -1,4 +1,4 @@
-export { Map, MapMouseEvent, MapTouchEvent, MapWheelEvent, type MapDataEvent, type MapBoxZoomEvent } from 'mapbox-gl';
+export type { Map } from 'mapbox-gl';
 export * from './map';
 export * from './controls';
 export * from './geojson';
@@ -13,3 +13,4 @@ export * from './tiles';
 export * from './image';
 export * from './video';
 export { default as helpers } from './helpers';
+export type * from './events';

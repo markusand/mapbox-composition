@@ -1,9 +1,7 @@
 import type { Map, AnySourceData, AnyLayer, Expression, CustomLayerInterface } from 'mapbox-gl';
-import { useSourceEvents, useLayerEvents, type SourceError, type SourceEventHandlers, type LayerEventHandlers } from './events';
+import { useSourceEvents, useLayerEvents, type SourceEventHandlers, type LayerEventHandlers } from './events';
 import { useAuthentication } from './authentication';
 import type { Prettify, MaybePromise } from './utils';
-
-export type { SourceError, SourceEventHandlers };
 
 export type LayerOptions = Prettify<{
   visible?: boolean;
