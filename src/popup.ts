@@ -27,11 +27,14 @@ export const usePopup = (...args: [Map, PopupOptions] | [PopupOptions]) => {
   };
   setContent(options.content || `<div id="${name}"></div>`);
 
+  const clear = () => popup.remove();
+
   return {
     name,
     get _popup() { return popup; },
     setLocation,
     setContent,
+    clear,
   };
 };
 

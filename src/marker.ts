@@ -26,11 +26,14 @@ export const useMarker = (map: Map, options: MarkerOptions) => {
   };
   if (options.popup) setPopup(options.popup);
 
+  const clear = () => marker.remove();
+
   return {
-    setLocation,
     get _marker() { return marker; },
     get popup() { return markerPopup; },
     set popup(popup) { setPopup(popup); },
+    setLocation,
+    clear,
   };
 };
 
