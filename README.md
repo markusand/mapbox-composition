@@ -9,7 +9,7 @@ Wrapper to use Mapbox GL with Composition API
 ## Install
 
 ```bash
-npm i mapbox-gl mapbox-composition
+npm i mapbox-gl mapbox-composition @types/mapbox-gl
 ```
 
 ## Usage
