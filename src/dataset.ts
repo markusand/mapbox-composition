@@ -88,10 +88,10 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
     layerEvents.bind(params.id);
   });
 
-  const reloadCache = () => {
+  const reloadCache = async () => {
     /* eslint-disable @typescript-eslint/no-use-before-define */
     if (cache.source) {
-      setSource(cache.source);
+      await setSource(cache.source);
       addLayers(Object.values(cache.layers));
     }
   };
@@ -107,7 +107,8 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
     const source = await input;
     sourceEvents.bind();
     map.addSource(options.id, source);
-    addLayers(options.layers);
+    // Set layers if not set yet, otherwise will be handled by reloadCache
+    if (!Object.keys(cache.layers).length) addLayers(options.layers);
     if (options.persist ?? true) {
       cache.source = source;
       map.on('style.load', reloadCache);
