@@ -29,9 +29,9 @@ export type ControlsOptions = {
   terrain: ControlOptions<typeof TerrainControl>,
 };
 
-export const useControls = (map: Map) => {
-  const CONTROLS: Record<string, IControl> = {};
+const CONTROLS: Record<string, IControl> = {};
 
+export const useControls = (map: Map) => {
   const addControl = (name: string, position: ControlPosition, control: IControl) => {
     CONTROLS[name] = control;
     map.addControl(control, position);
