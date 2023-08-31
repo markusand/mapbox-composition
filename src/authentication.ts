@@ -20,7 +20,8 @@ export const useAuthentication = (id: string) => {
 
   const updateURLs = (urls: string[]) => {
     const { token } = AUTHENTICATORS.get(id)!;
-    AUTHENTICATORS.set(id, { urls, token });
+    const origins = [...new Set(urls.map(url => new URL(url).origin))];
+    AUTHENTICATORS.set(id, { urls: origins, token });
   };
 
   const updateToken = (token: string) => {
