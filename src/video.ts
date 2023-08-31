@@ -31,10 +31,11 @@ export const useVideo = (map: Map, options: VideoLayerOptions) => {
 
   if (source) setSource(source);
 
-  const updateSource = (corners: [number, number][]) => {
+  const updateSource = async (video: MaybePromise<Omit<VideoData, 'urls'>>) => {
+    const data = await video;
     const _source = map.getSource(options.id) as UpdatedVideoSource;
     if (!_source) return;
-    _source.setCoordinates(corners);
+    _source.setCoordinates(data.corners);
   };
 
   const clearSource = () => {

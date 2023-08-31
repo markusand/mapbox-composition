@@ -28,15 +28,19 @@ export const useTiles = (map: Map, options: TilesLayerOptions) => {
 
   if (source) setSource(source);
 
-  const updateSource = (tiles: string | string[]) => {
+  const updateSource = async (tiles: MaybePromise<string | string[] | TileJSON>) => {
+    const data = await tiles;
     const _source = map.getSource(options.id) as VectorSourceImpl;
     if (!_source) return;
-    if (typeof tiles === 'string') {
-      _source.setUrl(tiles);
-      dataset.auth.updateURLs([tiles]);
+    if (typeof data === 'string') {
+      _source.setUrl(data);
+      dataset.auth.updateURLs([data]);
+    } else if (Array.isArray(data)) {
+      _source.setTiles(data);
+      dataset.auth.updateURLs(data);
     } else {
-      _source.setTiles(tiles);
-      dataset.auth.updateURLs(tiles);
+      _source.setTiles(data.tiles);
+      dataset.auth.updateURLs(data.tiles);
     }
   };
 

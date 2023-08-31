@@ -1,6 +1,6 @@
 {
   "name": "mapbox-composition",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "Mapbox GL wrapper to use with Composition API",
   "main": "lib/index.js",
   "module": "lib/index.js",

@@ -49,10 +49,11 @@ export const useGeoJSON = (map: Map, options: GeoJSONLayerOptions) => {
 
   if (source) setSource(source);
 
-  const updateSource = (geojson: GeoJSONData) => {
+  const updateSource = async (geojson: MaybePromise<GeoJSONData>) => {
+    const data = await geojson;
     const _source = map.getSource(options.id) as GeoJSONSource;
-    if (_source) _source.setData(geojson);
-    if (typeof geojson === 'string') dataset.auth.updateURLs([geojson]);
+    if (_source) _source.setData(data);
+    if (typeof data === 'string') dataset.auth.updateURLs([data]);
   };
 
   const clearSource = () => {

@@ -25,7 +25,8 @@ export const useImage = (map: Map, options: ImageLayerOptions) => {
 
   if (source) setSource(source);
 
-  const updateSource = ({ url, corners: coordinates }: Partial<ImageData>) => {
+  const updateSource = async (image: MaybePromise<Partial<ImageData>>) => {
+    const { url, corners: coordinates } = await image;
     const _source = map.getSource(options.id) as ImageSource;
     if (!_source) return;
     if (url) {
