@@ -111,7 +111,7 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
     if (!Object.keys(cache.layers).length) addLayers(options.layers);
     if (options.persist ?? true) {
       cache.source = source;
-      map.on('style.load', reloadCache);
+      map.once('style.load', reloadCache);
     }
   };
 
