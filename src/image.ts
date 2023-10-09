@@ -15,7 +15,7 @@ export type ImageLayerOptions = Prettify<{
 export const useImage = (map: Map, options: ImageLayerOptions) => {
   const { source, authToken, ...datasetOptions } = options;
 
-  const dataset = useDataset(map, datasetOptions);
+  const { updateSourceCache, ...dataset } = useDataset(map, datasetOptions);
 
   const setSource = async (input: MaybePromise<ImageData>) => {
     const { url, corners: coordinates } = await input;
@@ -31,9 +31,11 @@ export const useImage = (map: Map, options: ImageLayerOptions) => {
     if (!_source) return;
     if (url) {
       _source.updateImage({ url, coordinates });
+      updateSourceCache({ url, coordinates });
       if (authToken) dataset.auth.updateURLs([url]);
     } else if (coordinates) {
       _source.setCoordinates(coordinates);
+      updateSourceCache({ coordinates });
     }
   };
 

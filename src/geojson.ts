@@ -34,7 +34,7 @@ export const useGeoJSON = (map: Map, options: GeoJSONLayerOptions) => {
 
   const clusterOptions = cluster ? { cluster: true, ...clusterize(cluster) } : {};
 
-  const dataset = useDataset(map, datasetOptions);
+  const { updateSourceCache, ...dataset } = useDataset(map, datasetOptions);
 
   const setSource = async (geojson: MaybePromise<GeoJSONData>) => {
     const data = await geojson;
@@ -52,7 +52,10 @@ export const useGeoJSON = (map: Map, options: GeoJSONLayerOptions) => {
   const updateSource = async (geojson: MaybePromise<GeoJSONData>) => {
     const data = await geojson;
     const _source = map.getSource(options.id) as GeoJSONSource;
-    if (_source) _source.setData(data);
+    if (_source) {
+      _source.setData(data);
+      updateSourceCache({ data });
+    }
     if (typeof data === 'string') dataset.auth.updateURLs([data]);
   };
 

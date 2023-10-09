@@ -17,7 +17,7 @@ const ATTRIBUTES = ['type', 'source', 'promoteId', 'volatile', 'authToken'] as c
 export const useTiles = (map: Map, options: TilesLayerOptions) => {
   const [{ source, authToken, ...sourceOptions }, datasetOptions] = extract(options, ATTRIBUTES);
 
-  const dataset = useDataset(map, datasetOptions);
+  const { updateSourceCache, ...dataset } = useDataset(map, datasetOptions);
 
   const setSource = async (input: MaybePromise<string | string[] | TileJSON>) => {
     const tiles = await input;
@@ -34,12 +34,15 @@ export const useTiles = (map: Map, options: TilesLayerOptions) => {
     if (!_source) return;
     if (typeof data === 'string') {
       _source.setUrl(data);
+      updateSourceCache({ url: data });
       dataset.auth.updateURLs([data]);
     } else if (Array.isArray(data)) {
       _source.setTiles(data);
+      updateSourceCache({ tiles: data });
       dataset.auth.updateURLs(data);
     } else {
       _source.setTiles(data.tiles);
+      updateSourceCache({ tiles: data.tiles });
       dataset.auth.updateURLs(data.tiles);
     }
   };

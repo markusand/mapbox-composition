@@ -21,7 +21,7 @@ export type VideoLayerOptions = Prettify<{
 export const useVideo = (map: Map, options: VideoLayerOptions) => {
   const { source, authToken, ...datasetOptions } = options;
 
-  const dataset = useDataset(map, datasetOptions);
+  const { updateSourceCache, ...dataset } = useDataset(map, datasetOptions);
 
   const setSource = async (input: MaybePromise<VideoData>) => {
     const { urls, corners: coordinates } = await input;
@@ -36,6 +36,7 @@ export const useVideo = (map: Map, options: VideoLayerOptions) => {
     const _source = map.getSource(options.id) as UpdatedVideoSource;
     if (!_source) return;
     _source.setCoordinates(data.corners);
+    updateSourceCache({ coordinates: data.corners });
   };
 
   const clearSource = () => {

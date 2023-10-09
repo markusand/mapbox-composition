@@ -103,6 +103,10 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
     map.off('style.load', reloadCache);
   };
 
+  const updateSourceCache = (data: Partial<AnySourceData>) => {
+    Object.assign(cache.source || {}, data);
+  };
+
   const setSource = async (input: MaybePromise<AnySourceData>) => {
     const source = await input;
     sourceEvents.bind();
@@ -124,6 +128,7 @@ export const useDataset = (map: Map, options: DatasetOptions) => {
     hasLayer,
     clearSource,
     setSource,
+    updateSourceCache,
     isVisible,
     setVisibility,
     setFilter,
