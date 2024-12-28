@@ -22,7 +22,7 @@
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
-    "mapbox-gl": "^2.10.0"
+    "mapbox-gl": "^2.10.0 || ^3.0.0"
   },
   "files": [
     "lib"
